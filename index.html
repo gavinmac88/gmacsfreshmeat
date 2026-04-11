@@ -397,7 +397,7 @@
 
 <div id="cart" style="margin-bottom:20px;">
   <h3 style="color:#D4A96A;">Your Order</h3>
-  <div id="cart-items" style="color:#FAF4EB; font-size:14px; margin-bottom:10px;">
+  <div id="cart-items" style="color:#1A1A1A; font-size:14px; margin-bottom:10px;">
     No items yet
   </div>
   <div id="cart-total" style="color:#D4A96A; font-weight:700;">
@@ -482,7 +482,90 @@
     © 2026 Gmac's Fresh Meat · Muskoka, Ontario · Est. 2023
   </footer>
 
+<div id="popup" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #1A1A1A;
+  color: #FAF4EB;
+  padding: 12px 18px;
+  border-radius: 8px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 100;
+  font-size: 14px;
+">
+  Added to order
+</div>
+
   <script>
+
+let cart = [];
+
+function addToCart(name, price, btn) {
+  const existing = cart.find(item => item.name === name);
+
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ name, price, qty: 1 });
+  }
+
+  updateCart();
+
+const popup = document.getElementById("popup");
+if (popup) {
+  popup.style.opacity = "1";
+  popup.style.transform = "translateY(0)";
+  popup.innerText = `${name} added`;
+
+  setTimeout(() => {
+    popup.style.opacity = "0";
+    popup.style.transform = "translateY(20px)";
+  }, 1200);
+}
+
+  if (btn) {
+    btn.innerText = "Added ✓";
+    btn.style.background = "#4CAF50";
+
+    setTimeout(() => {
+      btn.innerText = "Add to Order";
+      btn.style.background = "#7A4E2D";
+    }, 1000);
+  }
+
+  const cartBox = document.getElementById("cart");
+  if (cartBox) {
+    cartBox.style.transform = "scale(1.08)";
+cartBox.style.transition = "transform 0.15s ease";
+    setTimeout(() => {
+      cartBox.style.transform = "scale(1)";
+    }, 200);
+  }
+}
+
+function updateCart() {
+  const cartItems = document.getElementById("cart-items");
+  const cartTotal = document.getElementById("cart-total");
+
+  if (cart.length === 0) {
+    cartItems.innerHTML = "No items yet";
+    cartTotal.innerHTML = "Total: $0";
+    return;
+  }
+
+  let total = 0;
+
+  cartItems.innerHTML = cart.map(item => {
+    total += item.price * item.qty;
+    return `${item.name} x${item.qty}`;
+  }).join("<br>");
+
+  cartTotal.innerHTML = `Total: $${total}`;
+}
+
 function sendOrder(e) {
   e.preventDefault();
 
@@ -491,13 +574,14 @@ function sendOrder(e) {
   const email = document.getElementById("email").value;
   const address = document.getElementById("address").value;
   const method = document.getElementById("method").value;
+
   let order = "";
 
-if (cart.length === 0) {
-  order = document.getElementById("order").value;
-} else {
-  order = cart.map(item => `${item.name} x${item.qty}`).join("\n");
-}
+  if (cart.length === 0) {
+    order = document.getElementById("order").value;
+  } else {
+    order = cart.map(item => `${item.name} x${item.qty}`).join("\n");
+  }
 
   const subject = "New Order - Gmac's Fresh Meat";
 
