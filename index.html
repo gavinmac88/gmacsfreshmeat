@@ -27,28 +27,56 @@
 
     /* ── HERO (white/cream) ── */
     .hero {
-  background: #FAF4EB;
-  padding: 4rem 2rem;
-  display: flex; flex-direction: column; align-items: center;
-  text-align: center; gap: 0.5rem;
-  border-bottom: 3px solid #7A4E2D;
-}
+      background: #FAF4EB;
+      padding: 4rem 2rem 0;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 0.5rem;
+      border-bottom: 3px solid #7A4E2D;
+    }
 
-.hero img {
-  height: 260px;
-  width: auto;
-  margin-bottom: 0.75rem;
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fadeInLogo 0.8s ease forwards;
-}
+    .hero img.hero-logo {
+      height: 260px;
+      width: auto;
+      margin-bottom: 0.75rem;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeInLogo 0.8s ease forwards;
+    }
 
-@keyframes fadeInLogo {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+    @keyframes fadeInLogo {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Market photos strip */
+    .hero-photos {
+      display: flex;
+      gap: 0;
+      width: 100%;
+      max-width: 1100px;
+      margin-top: 2.5rem;
+      overflow: hidden;
+      border-radius: 0;
+    }
+    .hero-photos img {
+      width: 50%;
+      height: 380px;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      opacity: 0;
+      animation: fadeInPhoto 1s ease 0.4s forwards;
+    }
+    .hero-photos img:first-child {
+      border-right: 3px solid #FAF4EB;
+    }
+    @keyframes fadeInPhoto {
+      to { opacity: 1; }
+    }
+    @media (max-width: 600px) {
+      .hero-photos { flex-direction: column; }
+      .hero-photos img { width: 100%; height: 240px; }
+      .hero-photos img:first-child { border-right: none; border-bottom: 3px solid #FAF4EB; }
+    }
     .hero-tag {
       font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
       color: #7A4E2D; background: #EDD8BB; padding: 4px 12px;
@@ -99,8 +127,27 @@
       background: #fff;
       border: 1px solid #D4B896;
       border-radius: 10px;
-      padding: 1.1rem 1.25rem;
+      padding: 0;
       display: flex; flex-direction: column; justify-content: space-between;
+      overflow: hidden;
+    }
+    .product-card-img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+      background: #EDD8BB;
+    }
+    .product-card-img-placeholder {
+      width: 100%;
+      height: 150px;
+      background: linear-gradient(135deg, #EDD8BB 0%, #D4B896 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+    }
+    .product-card-body {
+      padding: 1rem 1.1rem 1.1rem;
+      display: flex; flex-direction: column; flex-grow: 1;
     }
     .product-card .name { font-size: 15px; font-weight: 700; color: #1A1A1A; margin-bottom: 4px; font-family: 'Playfair Display', Georgia, serif; }
     .product-card .desc { font-size: 12px; color: #7A4E2D; flex-grow: 1; margin-bottom: 10px; line-height: 1.5; }
@@ -181,7 +228,7 @@
   .hero h1 { font-size: 28px; }
   nav { flex-direction: column; gap: 0.75rem; padding: 1rem; }
 
-  .hero img {
+  .hero img.hero-logo {
     height: 180px;
   }
 }
@@ -204,13 +251,17 @@
 
   <!-- HERO -->
   <div class="hero">
-    <img src="GMACs_Fresh_Meat_logo_2024.png" alt="Gmac's Fresh Meat logo" />
+    <img class="hero-logo" src="GMACs_Fresh_Meat_logo_2024.png" alt="Gmac's Fresh Meat logo" />
     <div class="hero-tag">Est. 2023 &nbsp;·&nbsp; Muskoka, Ontario</div>
     <h1>Grass-fed. Non-GMO. Ontario raised.</h1>
     <p>Fresh, premium cuts brought directly to farmers markets across Muskoka — and now delivered to your door.</p>
     <div class="hero-btns">
       <a href="#order" class="btn-primary">Place an order</a>
       <a href="#products" class="btn-secondary">See our products</a>
+    </div>
+    <div class="hero-photos">
+      <img src="IMG_7471.jpeg" alt="Gmac's Fresh Meat at the farmers market" />
+      <img src="IMG_7470.jpeg" alt="Gmac's Fresh Meat selling at the market" />
     </div>
   </div>
 
@@ -223,144 +274,152 @@
     <div class="category-label"> BEEF</div>
     <div class="products-grid">
       <div class="product-card">
-        <div class="name">New York Striploin</div>
-        <div class="desc">12oz · Grass-fed &amp; finished Ontario beef</div>
-        <div class="price">$30</div>
-        <button onclick="addToCart('New York Striploin', 30, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
+        <div class="product-card-img-placeholder">🥩</div>
+        <div class="product-card-body">
+          <div class="name">New York Striploin</div>
+          <div class="desc">12oz · Grass-fed &amp; finished Ontario beef</div>
+          <div class="price">$30</div>
+          <button onclick="addToCart('New York Striploin', 30, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
       </div>
 
       <div class="product-card">
-  <div class="name">Ribeye Steak</div>
-  <div class="desc">12oz · Grass-fed & finished Ontario beef</div>
-  <div class="price">$30</div>
-  <button onclick="addToCart('Ribeye Steak', 30, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
-</div>
-
-      <div class="product-card">
-        <div class="name">Tomahawk Steak</div>
-        <div class="desc">Ontario grass-fed — the showstopper cut</div>
-        <div class="price">$75</div>
-        <button onclick="addToCart('Tomahawk Steak', 75, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
+        <div class="product-card-img-placeholder">🥩</div>
+        <div class="product-card-body">
+          <div class="name">Ribeye Steak</div>
+          <div class="desc">12oz · Grass-fed &amp; finished Ontario beef</div>
+          <div class="price">$30</div>
+          <button onclick="addToCart('Ribeye Steak', 30, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
       </div>
 
-
       <div class="product-card">
-        <div class="name">Prime Rib Burgers</div>
-        <div class="desc">4-pack · Rich, beefy flavour</div>
-        <div class="price">$20</div>
-        <button onclick="addToCart('Prime Rib Burgers', 20, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
+        <div class="product-card-img-placeholder">🪓</div>
+        <div class="product-card-body">
+          <div class="name">Tomahawk Steak</div>
+          <div class="desc">Ontario grass-fed — the showstopper cut</div>
+          <div class="price">$75</div>
+          <button onclick="addToCart('Tomahawk Steak', 75, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
       </div>
 
-
       <div class="product-card">
-        <div class="name">Wagyu Burgers</div>
-        <div class="desc">2-pack · Premium marbled wagyu beef</div>
-        <div class="price">$20</div>
-        <button onclick="addToCart('Waygu Burgers', 20, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
+        <div class="product-card-img-placeholder">🍔</div>
+        <div class="product-card-body">
+          <div class="name">Prime Rib Burgers</div>
+          <div class="desc">4-pack · Rich, beefy flavour</div>
+          <div class="price">$20</div>
+          <button onclick="addToCart('Prime Rib Burgers', 20, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
       </div>
 
+      <div class="product-card">
+        <div class="product-card-img-placeholder">🍔</div>
+        <div class="product-card-body">
+          <div class="name">Wagyu Burgers</div>
+          <div class="desc">2-pack · Premium marbled wagyu beef</div>
+          <div class="price">$20</div>
+          <button onclick="addToCart('Waygu Burgers', 20, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
+      </div>
 
       <div class="product-card">
-        <div class="name">Chuck &amp; Brisket Burgers</div>
-        <div class="desc">4-pack · Slow-cooked flavour profile</div>
-        <div class="price">$20</div>
-        <button onclick="addToCart('Chuck & Brisket Burgers', 20, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
+        <div class="product-card-img-placeholder">🍔</div>
+        <div class="product-card-body">
+          <div class="name">Chuck &amp; Brisket Burgers</div>
+          <div class="desc">4-pack · Slow-cooked flavour profile</div>
+          <div class="price">$20</div>
+          <button onclick="addToCart('Chuck & Brisket Burgers', 20, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
       </div>
-</div>
+    </div>
+
     <div class="category-label"> CHICKEN</div>
     <div class="products-grid">
       <div class="product-card">
-        <div class="name">Split Tip Chicken Wings</div>
-        <div class="desc">1lb · Non-GMO, Ontario raised</div>
-        <div class="price">$20</div>
-        <button onclick="addToCart('Chicken Wings', 20, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
+        <div class="product-card-img-placeholder">🍗</div>
+        <div class="product-card-body">
+          <div class="name">Split Tip Chicken Wings</div>
+          <div class="desc">1lb · Non-GMO, Ontario raised</div>
+          <div class="price">$20</div>
+          <button onclick="addToCart('Chicken Wings', 20, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
       </div>
 
-
       <div class="product-card">
-        <div class="name">Organic Chicken Breast</div>
-        <div class="desc">2-pack · Non-GMO organic Ontario chicken</div>
-        <div class="price">$20</div>
-        <button onclick="addToCart('Chicken Breast', 20, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
+        <div class="product-card-img-placeholder">🍗</div>
+        <div class="product-card-body">
+          <div class="name">Organic Chicken Breast</div>
+          <div class="desc">2-pack · Non-GMO organic Ontario chicken</div>
+          <div class="price">$20</div>
+          <button onclick="addToCart('Chicken Breast', 20, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
       </div>
     </div>
 
     <div class="category-label"> PORK</div>
     <div class="products-grid">
       <div class="product-card">
-        <div class="name">Pork Back Ribs</div>
-        <div class="desc">Full rack · Ontario pork</div>
-        <div class="price">$30</div>
-        <button onclick="addToCart('Pork Back Ribs', 30, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
-      </div>
-
-
-      <div class="product-card">
-        <div class="name">Smoked Thick Cut Breakfast Bacon</div>
-        <div class="desc">Thick-cut, smoky, and rich</div>
-        <div class="price">$20</div>
-        <button onclick="addToCart('Thick Cut Breakfast Bacon', 20, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
+        <div class="product-card-img-placeholder">🍖</div>
+        <div class="product-card-body">
+          <div class="name">Pork Back Ribs</div>
+          <div class="desc">Full rack · Ontario pork</div>
+          <div class="price">$30</div>
+          <button onclick="addToCart('Pork Back Ribs', 30, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
       </div>
 
       <div class="product-card">
-        <div class="name">Honey Garlic Sausage</div>
-        <div class="desc">4-pack · Sweet and savoury</div>
-        <div class="price">$15</div>
-        <button onclick="addToCart('Honey Garlic Sausage', 15, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
+        <div class="product-card-img-placeholder">🥓</div>
+        <div class="product-card-body">
+          <div class="name">Smoked Thick Cut Breakfast Bacon</div>
+          <div class="desc">Thick-cut, smoky, and rich</div>
+          <div class="price">$20</div>
+          <button onclick="addToCart('Thick Cut Breakfast Bacon', 20, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
       </div>
 
-
       <div class="product-card">
-        <div class="name">Chorizo Sausage</div>
-        <div class="desc">4-pack · Bold and smoky</div>
-        <div class="price">$15</div>
-        <button onclick="addToCart('Chorizo Sausage', 15, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
+        <div class="product-card-img-placeholder">🌭</div>
+        <div class="product-card-body">
+          <div class="name">Honey Garlic Sausage</div>
+          <div class="desc">4-pack · Sweet and savoury</div>
+          <div class="price">$15</div>
+          <button onclick="addToCart('Honey Garlic Sausage', 15, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
       </div>
 
+      <div class="product-card">
+        <div class="product-card-img-placeholder">🌭</div>
+        <div class="product-card-body">
+          <div class="name">Chorizo Sausage</div>
+          <div class="desc">4-pack · Bold and smoky</div>
+          <div class="price">$15</div>
+          <button onclick="addToCart('Chorizo Sausage', 15, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
+      </div>
 
       <div class="product-card">
-        <div class="name">Spicy Italian Sausage</div>
-        <div class="desc">4-pack · Classic Italian heat</div>
-        <div class="price">$15</div>
-        <button onclick="addToCart('Classic Italian Heat', 15, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
+        <div class="product-card-img-placeholder">🌭</div>
+        <div class="product-card-body">
+          <div class="name">Spicy Italian Sausage</div>
+          <div class="desc">4-pack · Classic Italian heat</div>
+          <div class="price">$15</div>
+          <button onclick="addToCart('Classic Italian Heat', 15, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
       </div>
     </div>
 
     <div class="category-label"> LAMB</div>
     <div class="products-grid">
       <div class="product-card">
-        <div class="name">Lamb Loin Chops</div>
-        <div class="desc">4-pack · Ontario lamb</div>
-        <div class="price">$40</div>
-        <button onclick="addToCart('Lamb Loin Chops', 40, this)" class="btn-primary" style="margin-top:10px;">
-    Add to Order
-  </button>
+        <div class="product-card-img-placeholder">🍖</div>
+        <div class="product-card-body">
+          <div class="name">Lamb Loin Chops</div>
+          <div class="desc">4-pack · Ontario lamb</div>
+          <div class="price">$40</div>
+          <button onclick="addToCart('Lamb Loin Chops', 40, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+        </div>
       </div>
     </div>
   </div>
@@ -603,42 +662,6 @@ Sent from website`;
 
   window.location.href =
     `mailto:gmacswholesale@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
-</script>
-
-<script>
-let cart = [];
-
-function addToCart(name, price, btn) {
-  const existing = cart.find(item => item.name === name);
-
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ name, price, qty: 1 });
-  }
-
-  updateCart();
-
-  // 🔥 BUTTON FEEDBACK
-  if (btn) {
-    btn.innerText = "Added ✓";
-    btn.style.background = "#4CAF50";
-
-    setTimeout(() => {
-      btn.innerText = "Add to Order";
-      btn.style.background = "#7A4E2D";
-    }, 1000);
-  }
-
-  // 🔥 CART FLASH
-  const cartBox = document.getElementById("cart");
-  if (cartBox) {
-    cartBox.style.transform = "scale(1.03)";
-    setTimeout(() => {
-      cartBox.style.transform = "scale(1)";
-    }, 200);
-  }
 }
 </script>
 </body>
