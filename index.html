@@ -57,25 +57,62 @@
       overflow: hidden;
       border-radius: 0;
     }
-    .hero-photos img {
+
+    /* Each photo lives inside a clipping wrapper */
+    .hero-photo-wrap {
       width: 50%;
       height: 380px;
+      overflow: hidden;
+      display: block;
+      position: relative;
+    }
+    .hero-photo-wrap:first-child {
+      border-right: 3px solid #FAF4EB;
+    }
+
+    .hero-photos img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       object-position: center top;
       display: block;
       opacity: 0;
-      animation: fadeInPhoto 1s ease 0.5s forwards;
+      transform-origin: center center;
     }
-    .hero-photos img:first-child {
-      border-right: 3px solid #FAF4EB;
+
+    /* Photo 1: fade in then slowly zoom in from center */
+    .hero-photo-wrap:nth-child(1) img {
+      animation:
+        fadeInPhoto 1.2s ease 0.4s forwards,
+        kenBurnsZoomIn 18s ease-in-out 0.4s infinite alternate;
     }
+
+    /* Photo 2: fade in then slowly pan left-to-right */
+    .hero-photo-wrap:nth-child(2) img {
+      object-position: left top;
+      animation:
+        fadeInPhoto 1.2s ease 0.8s forwards,
+        kenBurnsPan 20s ease-in-out 0.8s infinite alternate;
+    }
+
     @keyframes fadeInPhoto {
       to { opacity: 1; }
     }
+
+    @keyframes kenBurnsZoomIn {
+      0%   { transform: scale(1.0); }
+      100% { transform: scale(1.12); }
+    }
+
+    @keyframes kenBurnsPan {
+      0%   { transform: scale(1.1) translateX(0%); }
+      100% { transform: scale(1.1) translateX(-4%); }
+    }
+
     @media (max-width: 600px) {
       .hero-photos { flex-direction: column; }
-      .hero-photos img { width: 100%; height: 240px; }
-      .hero-photos img:first-child { border-right: none; border-bottom: 3px solid #FAF4EB; }
+      .hero-photo-wrap { width: 100%; height: 240px; }
+      .hero-photo-wrap:first-child { border-right: none; border-bottom: 3px solid #FAF4EB; }
     }
     .hero-tag {
   font-size: 12px;
@@ -281,8 +318,12 @@
       <a href="#products" class="btn-secondary">See our products</a>
     </div>
     <div class="hero-photos">
-      <img src="IMG_7471.jpeg" alt="Gmac's Fresh Meat at the farmers market" />
-      <img src="IMG_7470.jpeg" alt="Gmac's Fresh Meat selling at the market" />
+      <div class="hero-photo-wrap">
+        <img src="IMG_7471.jpeg" alt="Gmac's Fresh Meat at the farmers market" />
+      </div>
+      <div class="hero-photo-wrap">
+        <img src="IMG_7470.jpeg" alt="Gmac's Fresh Meat selling at the market" />
+      </div>
     </div>
   </div>
 
