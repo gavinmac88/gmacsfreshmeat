@@ -28,10 +28,10 @@
     /* ── HERO (white/cream) ── */
     .hero {
       background: #FAF4EB;
-      padding: 4rem 2rem 3rem;
+      padding: 4rem 2rem 0;
       display: flex; flex-direction: column; align-items: center;
       text-align: center; gap: 0.5rem;
-      border-bottom: none;
+      border-bottom: 3px solid #7A4E2D;
     }
 
     .hero img.hero-logo {
@@ -47,84 +47,61 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── CINEMATIC BANNER ── */
-    .cinema-banner {
+    /* Market photos strip — framed */
+    .hero-photos {
       display: flex;
+      gap: 12px;
       width: 100%;
-      height: 520px;
-      overflow: hidden;
-      position: relative;
+      max-width: 960px;
+      margin-top: 2.5rem;
+      padding: 10px;
+      background: #fff;
+      border: 2px solid #D4B896;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(44,26,14,0.13);
     }
-
-    .cinema-banner::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.32) 100%),
-        linear-gradient(to right, rgba(0,0,0,0.15) 0%, transparent 15%, transparent 85%, rgba(0,0,0,0.15) 100%);
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    .cinema-photo-wrap {
+    .hero-photo-wrap {
       width: 50%;
-      height: 100%;
       overflow: hidden;
+      border-radius: 10px;
       position: relative;
     }
-
-    .cinema-divider {
-      position: absolute;
-      left: 50%;
-      top: 0; bottom: 0;
-      width: 3px;
-      background: rgba(250, 244, 235, 0.6);
-      z-index: 3;
-      transform: translateX(-50%);
-    }
-
-    .cinema-photo-wrap img {
+    .hero-photo-wrap img {
       width: 100%;
-      height: 100%;
+      height: 360px;
       object-fit: cover;
       object-position: center top;
       display: block;
       opacity: 0;
       transform-origin: center center;
+      border-radius: 10px;
     }
-
-    .cinema-photo-wrap:nth-child(1) img {
+    .hero-photo-wrap:nth-child(1) img {
       animation:
-        fadeInPhoto 1.4s ease 0.3s forwards,
-        kenBurnsZoomIn 20s ease-in-out 0.3s infinite alternate;
+        fadeInPhoto 1.2s ease 0.4s forwards,
+        kenBurnsZoomIn 18s ease-in-out 0.4s infinite alternate;
     }
-
-    .cinema-photo-wrap:nth-child(2) img {
+    .hero-photo-wrap:nth-child(2) img {
       object-position: left top;
       animation:
-        fadeInPhoto 1.4s ease 0.7s forwards,
-        kenBurnsPan 22s ease-in-out 0.7s infinite alternate;
+        fadeInPhoto 1.2s ease 0.8s forwards,
+        kenBurnsPan 20s ease-in-out 0.8s infinite alternate;
     }
-
     @keyframes fadeInPhoto {
       to { opacity: 1; }
     }
-
     @keyframes kenBurnsZoomIn {
       0%   { transform: scale(1.0); }
-      100% { transform: scale(1.13); }
+      100% { transform: scale(1.12); }
     }
-
     @keyframes kenBurnsPan {
       0%   { transform: scale(1.1) translateX(0%); }
-      100% { transform: scale(1.1) translateX(-5%); }
+      100% { transform: scale(1.1) translateX(-4%); }
     }
-
     @media (max-width: 600px) {
-      .cinema-banner { flex-direction: column; height: auto; }
-      .cinema-photo-wrap { width: 100%; height: 260px; }
-      .cinema-divider { display: none; }
+      .hero-photos { flex-direction: column; padding: 8px; gap: 8px; }
+      .hero-photo-wrap { width: 100%; }
+      .hero-photo-wrap img { height: 220px; }
     }
     .hero-tag {
   font-size: 12px;
@@ -148,11 +125,9 @@
       max-width: 620px; font-family: 'Rye', cursive; font-weight: 900;
     }
    .hero p {
-  font-size: 17px;
   color: #3E2A1A;
   max-width: 520px;
   line-height: 1.6;
-
   font-family: 'Bebas Neue', cursive;
   font-size: 26px;
   letter-spacing: 0.08em;
@@ -329,16 +304,13 @@
       <a href="#order" class="btn-primary">Place an order</a>
       <a href="#products" class="btn-secondary">See our products</a>
     </div>
-  </div>
-
-  <!-- CINEMATIC BANNER -->
-  <div class="cinema-banner">
-    <div class="cinema-divider"></div>
-    <div class="cinema-photo-wrap">
-      <img src="IMG_7471.jpeg" alt="Gmac's Fresh Meat at the farmers market" />
-    </div>
-    <div class="cinema-photo-wrap">
-      <img src="IMG_7470.jpeg" alt="Gmac's Fresh Meat selling at the market" />
+    <div class="hero-photos">
+      <div class="hero-photo-wrap">
+        <img src="IMG_7471.jpeg" alt="Gmac's Fresh Meat at the farmers market" />
+      </div>
+      <div class="hero-photo-wrap">
+        <img src="IMG_7470.jpeg" alt="Gmac's Fresh Meat selling at the market" />
+      </div>
     </div>
   </div>
 
