@@ -785,29 +785,6 @@ Sent from website`;
     const H = canvas.height = 500;
     const cx = W / 2, cy = H / 2;
 
-    /* ── CRACK LINES ── */
-    const NUM_CRACKS = 9;
-    const cracks = [];
-    for (let i = 0; i < NUM_CRACKS; i++) {
-      const angle = (i / NUM_CRACKS) * Math.PI * 2 + rnd(-0.15, 0.15);
-      const len   = rnd(100, 200);
-      const segs  = Math.floor(rnd(3, 5));
-      const pts   = [{x: cx, y: cy}];
-      let ax = cx, ay = cy;
-      for (let s = 0; s < segs; s++) {
-        const frac  = (s + 1) / segs;
-        const jitter = rnd(-18, 18);
-        ax += Math.cos(angle + jitter * 0.04) * (len / segs);
-        ay += Math.sin(angle + jitter * 0.04) * (len / segs);
-        pts.push({x: ax, y: ay});
-      }
-      // branch
-      const branch = Math.random() < 0.55;
-      cracks.push({ pts, alpha: 1, maxLen: len, drawn: 0, branch,
-                    branchDone: false, branchPts: [] });
-    }
-    let crackProgress = 0; // 0→1
-
     /* ── DUST PUFFS ── */
     const dustPuffs = [];
     const DUST_COUNT = 55;
@@ -861,42 +838,8 @@ Sent from website`;
 
     const START = performance.now();
 
-    function drawCracks(now) {
-      const elapsed = (now - START) / 1000;
-      crackProgress = Math.min(elapsed / 0.35, 1); // fully drawn in 0.35s
-      const crackAlpha = 1; // cracks stay permanently
-
-      for (const c of cracks) {
-        const totalPts = c.pts.length;
-        const visiblePts = Math.floor(crackProgress * (totalPts - 1)) + 1;
-        if (visiblePts < 2) continue;
-
-        ctx.save();
-        ctx.strokeStyle = `rgba(40,20,5,${crackAlpha * 0.85})`;
-        ctx.lineWidth = rnd(1, 2.5);
-        ctx.shadowColor = "rgba(20,8,0,0.7)";
-        ctx.shadowBlur = 4;
-        ctx.beginPath();
-        ctx.moveTo(c.pts[0].x, c.pts[0].y);
-        for (let p = 1; p < visiblePts; p++) ctx.lineTo(c.pts[p].x, c.pts[p].y);
-        ctx.stroke();
-
-        // secondary hairline alongside main crack
-        ctx.strokeStyle = `rgba(180,140,90,${crackAlpha * 0.3})`;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(c.pts[0].x + 2, c.pts[0].y + 2);
-        for (let p = 1; p < visiblePts; p++) ctx.lineTo(c.pts[p].x + 2, c.pts[p].y + 2);
-        ctx.stroke();
-        ctx.restore();
-      }
-    }
-
     function animate(now) {
       ctx.clearRect(0, 0, W, H);
-
-      // Cracks
-      drawCracks(now);
 
       // Dust puffs
       let dustAlive = false;
@@ -924,24 +867,7 @@ Sent from website`;
       if (dustAlive) {
         requestAnimationFrame(animate);
       } else {
-        // Final frame — draw cracks permanently and stop
         ctx.clearRect(0, 0, W, H);
-        const fakeNow = START + 10000;
-        const elapsed2 = (fakeNow - START) / 1000;
-        for (const c of cracks) {
-          const totalPts = c.pts.length;
-          if (totalPts < 2) continue;
-          ctx.save();
-          ctx.strokeStyle = 'rgba(40,20,5,0.75)';
-          ctx.lineWidth = rnd(1, 2.5);
-          ctx.shadowColor = 'rgba(20,8,0,0.5)';
-          ctx.shadowBlur = 3;
-          ctx.beginPath();
-          ctx.moveTo(c.pts[0].x, c.pts[0].y);
-          for (let p = 1; p < totalPts; p++) ctx.lineTo(c.pts[p].x, c.pts[p].y);
-          ctx.stroke();
-          ctx.restore();
-        }
       }
     }
 
