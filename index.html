@@ -28,10 +28,10 @@
     /* ── HERO (white/cream) ── */
     .hero {
       background: #FAF4EB;
-      padding: 4rem 2rem 0;
+      padding: 4rem 2rem 2.5rem;
       display: flex; flex-direction: column; align-items: center;
       text-align: center; gap: 0.5rem;
-      border-bottom: 3px solid #7A4E2D;
+      border-bottom: none;
     }
 
     .hero img.hero-logo {
@@ -48,17 +48,20 @@
     }
 
     /* Market photos strip — framed */
+    /* Dark band wrapper */
+    .photos-band {
+      background: #1A1A1A;
+      border-top: 3px solid #7A4E2D;
+      border-bottom: 3px solid #7A4E2D;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+    }
     .hero-photos {
       display: flex;
       gap: 12px;
       width: 100%;
       max-width: 960px;
-      margin-top: 2.5rem;
-      padding: 10px;
-      background: #fff;
-      border: 2px solid #D4B896;
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(44,26,14,0.13);
     }
     .hero-photo-wrap {
       width: 50%;
@@ -310,6 +313,10 @@
       <a href="#order" class="btn-primary">Place an order</a>
       <a href="#products" class="btn-secondary">See our products</a>
     </div>
+  </div>
+
+  <!-- MARKET PHOTOS BAND -->
+  <div class="photos-band">
     <div class="hero-photos">
       <div class="hero-photo-wrap">
         <img src="IMG_7471.jpeg" alt="Gmac's Fresh Meat at the farmers market" />
