@@ -41,6 +41,8 @@
       opacity: 0;
       transform: scale(0);
       animation: punchInLogo 0.6s cubic-bezier(0.22, 1.2, 0.36, 1) 0.2s forwards;
+      position: relative;
+      z-index: 2;
     }
 
     @keyframes punchInLogo {
@@ -48,6 +50,25 @@
       60%  { opacity: 1; transform: scale(1.18); }
       80%  { transform: scale(0.94); }
       100% { opacity: 1; transform: scale(1); }
+    }
+
+    .logo-slam-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+    }
+
+    #debrisCanvas {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 1;
+      width: 600px;
+      height: 600px;
     }
 
     /* Market photos strip — framed */
@@ -309,7 +330,10 @@
 
   <!-- HERO -->
   <div class="hero">
-    <img class="hero-logo" src="GMACs_Fresh_Meat_logo_2024.png" alt="Gmac's Fresh Meat logo" />
+    <div class="logo-slam-wrap">
+      <img class="hero-logo" src="GMACs_Fresh_Meat_logo_2024.png" alt="Gmac's Fresh Meat logo" />
+      <canvas id="debrisCanvas"></canvas>
+    </div>
     <div class="hero-tag">Est. 2023 &nbsp;·&nbsp; Muskoka, Ontario</div>
     <h1>Grass-fed. Non-GMO. Ontario Raised.</h1>
     <p>Fresh, premium cuts brought directly to farmers markets across Muskoka and now delivered to your door.</p>
@@ -726,5 +750,123 @@ Sent from website`;
     `mailto:gmacswholesale@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 </script>
+
+<script>
+(function() {
+  const SLAM_DELAY = 0.55; // seconds — fires just as logo hits peak scale
+
+  function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+  function spawnDebris() {
+    const canvas = document.getElementById("debrisCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width  = 600;
+    const H = canvas.height = 600;
+    const cx = W / 2, cy = H / 2;
+
+    // Colour palette: dusty browns, warm greys, cream chips
+    const colours = ["#7A4E2D","#5F3A1A","#A0754A","#C4A882","#FAF4EB","#3D2010","#D4B896","#8B6040"];
+
+    const particles = [];
+    const COUNT = 72;
+
+    for (let i = 0; i < COUNT; i++) {
+      const angle = randomBetween(0, Math.PI * 2);
+      const speed = randomBetween(2.5, 11);
+      const size  = randomBetween(3, 11);
+      // mix of rectangles and jagged shards
+      const shape = Math.random() < 0.5 ? "rect" : "shard";
+      particles.push({
+        x: cx, y: cy,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - randomBetween(1, 4), // bias upward
+        rotation: randomBetween(0, Math.PI * 2),
+        rotSpeed: randomBetween(-0.25, 0.25),
+        w: size, h: size * randomBetween(0.4, 1.8),
+        colour: colours[Math.floor(Math.random() * colours.length)],
+        alpha: 1,
+        gravity: randomBetween(0.18, 0.38),
+        shape,
+        life: 1,
+        decay: randomBetween(0.018, 0.038)
+      });
+    }
+
+    // Shockwave ring
+    let ringRadius = 0, ringAlpha = 0.7;
+
+    function drawShard(ctx, p) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.colour;
+      ctx.beginPath();
+      const hw = p.w / 2, hh = p.h / 2;
+      ctx.moveTo(-hw, -hh);
+      ctx.lineTo(hw * 0.6, -hh * 1.3);
+      ctx.lineTo(hw, hh * 0.4);
+      ctx.lineTo(-hw * 0.4, hh);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawRect(ctx, p) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.colour;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, W, H);
+
+      // Shockwave
+      if (ringAlpha > 0) {
+        ctx.save();
+        ctx.globalAlpha = ringAlpha;
+        ctx.strokeStyle = "#A0754A";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+        ringRadius += 9;
+        ringAlpha  -= 0.045;
+      }
+
+      let alive = false;
+      for (const p of particles) {
+        if (p.alpha <= 0) continue;
+        alive = true;
+        p.x  += p.vx;
+        p.y  += p.vy;
+        p.vy += p.gravity;
+        p.vx *= 0.97;
+        p.rotation += p.rotSpeed;
+        p.life  -= p.decay;
+        p.alpha  = Math.max(0, p.life);
+
+        if (p.shape === "shard") drawShard(ctx, p);
+        else                     drawRect(ctx, p);
+      }
+
+      if (alive || ringAlpha > 0) requestAnimationFrame(animate);
+      else ctx.clearRect(0, 0, W, H);
+    }
+
+    animate();
+  }
+
+  // Fire when logo slam peaks
+  setTimeout(spawnDebris, SLAM_DELAY * 1000);
+})();
+</script>
+
 </body>
 </html>
