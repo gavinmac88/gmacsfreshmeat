@@ -26,7 +26,19 @@
     .nav-links a:hover { color: #7A4E2D; }
 
     /* ── HERO (white/cream) ── */
-    .hero {
+    @keyframes screenShake {
+      0%   { transform: translate(0,0) rotate(0deg); }
+      15%  { transform: translate(-5px, 4px) rotate(-0.4deg); }
+      30%  { transform: translate(5px, -3px) rotate(0.3deg); }
+      45%  { transform: translate(-4px, 3px) rotate(-0.2deg); }
+      60%  { transform: translate(3px, -2px) rotate(0.15deg); }
+      75%  { transform: translate(-2px, 1px) rotate(-0.1deg); }
+      100% { transform: translate(0,0) rotate(0deg); }
+    }
+    .hero-shake {
+      animation: screenShake 0.5s ease forwards;
+    }
+        .hero {
       background: #FAF4EB;
       padding: 4rem 2rem 2.5rem;
       display: flex; flex-direction: column; align-items: center;
@@ -40,16 +52,17 @@
       margin-bottom: 0.75rem;
       opacity: 0;
       transform: scale(0);
-      animation: punchInLogo 0.6s cubic-bezier(0.22, 1.2, 0.36, 1) 0.2s forwards;
+      animation: punchInLogo 0.7s cubic-bezier(0.18, 1.1, 0.32, 1) 0.2s forwards;
       position: relative;
-      z-index: 2;
+      z-index: 3;
     }
 
     @keyframes punchInLogo {
-      0%   { opacity: 0; transform: scale(0); }
-      60%  { opacity: 1; transform: scale(1.18); }
-      80%  { transform: scale(0.94); }
-      100% { opacity: 1; transform: scale(1); }
+      0%   { opacity: 0; transform: scale(0) translateY(-40px); }
+      55%  { opacity: 1; transform: scale(1.22) translateY(6px); }
+      72%  { transform: scale(0.91) translateY(0px); }
+      85%  { transform: scale(1.06) translateY(0px); }
+      100% { opacity: 1; transform: scale(1) translateY(0px); }
     }
 
     .logo-slam-wrap {
@@ -66,9 +79,9 @@
       left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
-      z-index: 1;
-      width: 600px;
-      height: 600px;
+      z-index: 0;
+      width: 500px;
+      height: 500px;
     }
 
     /* Market photos strip — framed */
@@ -758,20 +771,27 @@ Sent from website`;
   function rnd(a, b) { return a + Math.random() * (b - a); }
 
   function launch() {
+    // Screen shake
+    const hero = document.querySelector('.hero');
+    if (hero) {
+      hero.classList.add('hero-shake');
+      setTimeout(() => hero.classList.remove('hero-shake'), 500);
+    }
+
     const canvas = document.getElementById("debrisCanvas");
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
-    const W = canvas.width  = 700;
-    const H = canvas.height = 700;
+    const W = canvas.width  = 500;
+    const H = canvas.height = 500;
     const cx = W / 2, cy = H / 2;
 
     /* ── CRACK LINES ── */
-    const NUM_CRACKS = 10;
+    const NUM_CRACKS = 9;
     const cracks = [];
     for (let i = 0; i < NUM_CRACKS; i++) {
       const angle = (i / NUM_CRACKS) * Math.PI * 2 + rnd(-0.15, 0.15);
-      const len   = rnd(80, 180);
-      const segs  = Math.floor(rnd(3, 6));
+      const len   = rnd(60, 130);
+      const segs  = Math.floor(rnd(3, 5));
       const pts   = [{x: cx, y: cy}];
       let ax = cx, ay = cy;
       for (let s = 0; s < segs; s++) {
@@ -790,30 +810,32 @@ Sent from website`;
 
     /* ── DUST PUFFS ── */
     const dustPuffs = [];
-    const DUST_COUNT = 38;
+    const DUST_COUNT = 55;
     for (let i = 0; i < DUST_COUNT; i++) {
-      const angle = rnd(0, Math.PI * 2);
+      const goLeft = Math.random() < 0.5;
+      const angle = goLeft ? Math.PI - rnd(0.1, 0.55) : rnd(0.1, 0.55);
       const speed = rnd(0.6, 3.2);
       dustPuffs.push({
         x: cx + rnd(-30, 30),
         y: cy + rnd(-20, 20),
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed - rnd(0.5, 2.5),
-        radius: rnd(12, 42),
-        alpha: rnd(0.35, 0.65),
-        grow: rnd(0.3, 1.1),
-        decay: rnd(0.008, 0.018),
+        radius: rnd(20, 65),
+        alpha: rnd(0.55, 0.85),
+        grow: rnd(2.5, 5.5),
+        decay: rnd(0.025, 0.05),
         colour: Math.random() < 0.5 ? "120,90,60" : "180,155,120"
       });
     }
 
     /* ── ROCK CHUNKS ── */
     const chunks = [];
-    const CHUNK_COUNT = 22;
+    const CHUNK_COUNT = 32;
     for (let i = 0; i < CHUNK_COUNT; i++) {
-      const angle = rnd(0, Math.PI * 2);
-      const speed = rnd(3.5, 10);
-      const size  = rnd(6, 18);
+      const goLeft = Math.random() < 0.5;
+      const angle = goLeft ? Math.PI - rnd(0.1, 0.55) : rnd(0.1, 0.55);
+      const speed = rnd(7, 18);
+      const size  = rnd(10, 28);
       // irregular polygon points
       const sides = Math.floor(rnd(4, 7));
       const poly  = [];
@@ -826,14 +848,14 @@ Sent from website`;
       chunks.push({
         x: cx, y: cy,
         vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - rnd(2, 5),
+        vy: Math.sin(angle) * speed * 0.25 - rnd(1, 3),
         rotation: rnd(0, Math.PI * 2),
         rotSpeed: rnd(-0.18, 0.18),
         poly,
         colour: colours[Math.floor(Math.random() * colours.length)],
         alpha: 1,
-        gravity: rnd(0.25, 0.5),
-        decay: rnd(0.012, 0.025)
+        gravity: rnd(0.12, 0.28),
+        decay: rnd(0.006, 0.014)
       });
     }
 
@@ -842,9 +864,7 @@ Sent from website`;
     function drawCracks(now) {
       const elapsed = (now - START) / 1000;
       crackProgress = Math.min(elapsed / 0.35, 1); // fully drawn in 0.35s
-      const crackAlpha = crackProgress > 0.7
-        ? 1 - ((crackProgress - 0.7) / 0.3)  // fade out
-        : 1;
+      const crackAlpha = 1; // cracks stay permanently
 
       for (const c of cracks) {
         const totalPts = c.pts.length;
@@ -853,7 +873,7 @@ Sent from website`;
 
         ctx.save();
         ctx.strokeStyle = `rgba(40,20,5,${crackAlpha * 0.85})`;
-        ctx.lineWidth = rnd(1.5, 3);
+        ctx.lineWidth = rnd(1, 2.5);
         ctx.shadowColor = "rgba(20,8,0,0.7)";
         ctx.shadowBlur = 4;
         ctx.beginPath();
@@ -901,41 +921,27 @@ Sent from website`;
         ctx.restore();
       }
 
-      // Rock chunks
-      let chunksAlive = false;
-      for (const c of chunks) {
-        if (c.alpha <= 0) continue;
-        chunksAlive = true;
-        c.x  += c.vx;
-        c.y  += c.vy;
-        c.vy += c.gravity;
-        c.vx *= 0.975;
-        c.rotation += c.rotSpeed;
-        c.alpha = Math.max(0, c.alpha - c.decay);
-
-        ctx.save();
-        ctx.translate(c.x, c.y);
-        ctx.rotate(c.rotation);
-        ctx.globalAlpha = c.alpha;
-        ctx.fillStyle = c.colour;
-        ctx.shadowColor = "rgba(0,0,0,0.5)";
-        ctx.shadowBlur  = 4;
-        ctx.beginPath();
-        ctx.moveTo(c.poly[0].x, c.poly[0].y);
-        for (let p = 1; p < c.poly.length; p++) ctx.lineTo(c.poly[p].x, c.poly[p].y);
-        ctx.closePath();
-        ctx.fill();
-        // highlight edge
-        ctx.strokeStyle = "rgba(200,170,120,0.4)";
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      if (dustAlive || chunksAlive || crackProgress < 1) {
+      if (dustAlive) {
         requestAnimationFrame(animate);
       } else {
+        // Final frame — draw cracks permanently and stop
         ctx.clearRect(0, 0, W, H);
+        const fakeNow = START + 10000;
+        const elapsed2 = (fakeNow - START) / 1000;
+        for (const c of cracks) {
+          const totalPts = c.pts.length;
+          if (totalPts < 2) continue;
+          ctx.save();
+          ctx.strokeStyle = 'rgba(40,20,5,0.75)';
+          ctx.lineWidth = rnd(1, 2.5);
+          ctx.shadowColor = 'rgba(20,8,0,0.5)';
+          ctx.shadowBlur = 3;
+          ctx.beginPath();
+          ctx.moveTo(c.pts[0].x, c.pts[0].y);
+          for (let p = 1; p < totalPts; p++) ctx.lineTo(c.pts[p].x, c.pts[p].y);
+          ctx.stroke();
+          ctx.restore();
+        }
       }
     }
 
