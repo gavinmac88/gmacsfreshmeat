@@ -17,7 +17,7 @@
       border-bottom: 2px solid #7A4E2D;
       position: sticky; top: 0; z-index: 10;
     }
-    .nav-logo img { height: 60px; width: auto; }
+    .nav-logo img { height: 60px; width: auto; filter: drop-shadow(0 0 0px white) drop-shadow(0 0 3px white) drop-shadow(0 0 6px white); }
     .nav-links { display: flex; gap: 1.5rem; }
     .nav-links a {
       font-size: 14px; color: #FAF4EB; text-decoration: none;
@@ -55,6 +55,7 @@
       animation: punchInLogo 0.7s cubic-bezier(0.18, 1.1, 0.32, 1) 0.2s forwards;
       position: relative;
       z-index: 3;
+      filter: drop-shadow(0 0 0px white) drop-shadow(0 0 3px white) drop-shadow(0 0 6px white);
     }
 
     @keyframes punchInLogo {
