@@ -6,26 +6,212 @@
   <title>Gmac's Fresh Meat – Muskoka, Ontario</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@400;700&family=Rye&family=Bebas+Neue&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Lato', Arial, sans-serif; color: #2C1A0E; background: #FAF4EB; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── NAV (white) ── */
+    :root {
+      --cream:    #FAF4EB;
+      --brown:    #7A4E2D;
+      --dark-brown: #5F3A1A;
+      --black:    #1A1A1A;
+      --charcoal: #2E2E2E;
+      --border:   #D4B896;
+      --gold:     #D4A96A;
+      --muted:    #B0957A;
+      --text:     #2C1A0E;
+    }
+
+    body {
+      font-family: 'Lato', Arial, sans-serif;
+      color: var(--text);
+      background: var(--cream);
+    }
+
+    /* ────────────────── NAV ────────────────── */
     nav {
       display: flex; justify-content: space-between; align-items: center;
       padding: 0.75rem 2rem;
-      background: #FAF4EB;
-      border-bottom: 2px solid #D4B896;
-      position: sticky; top: 0; z-index: 10;
+      background: var(--cream);
+      border-bottom: 2px solid var(--border);
+      position: sticky; top: 0; z-index: 200;
     }
     .nav-logo img { height: 60px; width: auto; }
-    .nav-links { display: flex; gap: 1.5rem; }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
     .nav-links a {
-      font-size: 14px; color: #2C1A0E; text-decoration: none;
+      font-size: 14px; color: var(--text); text-decoration: none;
       font-family: 'Lato', sans-serif; letter-spacing: 0.05em; font-weight: 700;
     }
-    .nav-links a:hover { color: #7A4E2D; }
+    .nav-links a:hover { color: var(--brown); }
 
-    /* ── HERO (white/cream) ── */
+    /* Cart icon in nav */
+    #cart-nav-btn {
+      position: relative;
+      background: var(--brown);
+      color: var(--cream);
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Lato', sans-serif;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 8px;
+      transition: background 0.2s;
+    }
+    #cart-nav-btn:hover { background: var(--dark-brown); }
+    #cart-nav-badge {
+      display: none;
+      position: absolute;
+      top: -6px; right: -6px;
+      background: #E05C2A;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      align-items: center; justify-content: center;
+    }
+    #cart-nav-badge.visible { display: flex; }
+
+    /* ────────────────── CART DRAWER ────────────────── */
+    #cart-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 300;
+      backdrop-filter: blur(2px);
+    }
+    #cart-overlay.open { display: block; }
+
+    #cart-drawer {
+      position: fixed;
+      top: 0; right: 0;
+      width: min(420px, 100vw);
+      height: 100dvh;
+      background: var(--black);
+      z-index: 400;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(110%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      border-left: 3px solid var(--brown);
+    }
+    #cart-drawer.open { transform: translateX(0); }
+
+    .drawer-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #3D3D3D;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .drawer-header h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: var(--cream);
+      font-weight: 900;
+    }
+    #drawer-close {
+      background: none; border: none;
+      color: var(--muted); font-size: 22px; cursor: pointer; line-height: 1;
+      transition: color 0.2s;
+    }
+    #drawer-close:hover { color: var(--cream); }
+
+    #drawer-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem 1.5rem;
+    }
+    #drawer-items::-webkit-scrollbar { width: 4px; }
+    #drawer-items::-webkit-scrollbar-thumb { background: #3D3D3D; border-radius: 2px; }
+
+    .drawer-empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .drawer-empty .empty-icon { font-size: 42px; margin-bottom: 0.75rem; }
+
+    .drawer-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #2E2E2E;
+    }
+    .drawer-item:last-child { border-bottom: none; }
+    .drawer-item-info { flex: 1; }
+    .drawer-item-name {
+      font-size: 14px; font-weight: 700; color: var(--cream);
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    .drawer-item-price {
+      font-size: 13px; color: var(--gold); margin-top: 2px;
+    }
+    .qty-controls {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .qty-btn {
+      width: 28px; height: 28px;
+      background: #2E2E2E; border: 1px solid #3D3D3D;
+      border-radius: 6px; color: var(--cream); font-size: 16px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+      font-family: 'Lato', sans-serif;
+    }
+    .qty-btn:hover { background: var(--brown); }
+    .qty-num { font-size: 14px; font-weight: 700; color: var(--cream); min-width: 20px; text-align: center; }
+
+    .drawer-footer {
+      padding: 1.25rem 1.5rem;
+      border-top: 1px solid #3D3D3D;
+      background: #111;
+    }
+    .drawer-subtotal {
+      display: flex; justify-content: space-between;
+      font-size: 14px; color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .drawer-total {
+      display: flex; justify-content: space-between;
+      font-size: 18px; font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 1rem;
+      padding-top: 8px;
+      border-top: 1px solid #3D3D3D;
+    }
+    .drawer-total span:last-child { color: var(--gold); }
+
+    #checkout-btn {
+      display: block;
+      width: 100%;
+      background: var(--brown);
+      color: var(--cream);
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Lato', sans-serif;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: background 0.2s;
+    }
+    #checkout-btn:hover { background: var(--dark-brown); }
+    #checkout-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .drawer-note {
+      font-size: 11px;
+      color: #555;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* ────────────────── HERO ────────────────── */
     @keyframes screenShake {
       0%   { transform: translate(0,0) rotate(0deg); }
       15%  { transform: translate(-5px, 4px) rotate(-0.4deg); }
@@ -35,29 +221,22 @@
       75%  { transform: translate(-2px, 1px) rotate(-0.1deg); }
       100% { transform: translate(0,0) rotate(0deg); }
     }
-    .hero-shake {
-      animation: screenShake 0.5s ease forwards;
-    }
-        .hero {
-      background: #FAF4EB;
-      padding: 4rem 2rem 2.5rem;
+    .hero-shake { animation: screenShake 0.5s ease forwards; }
+
+    .hero {
+      background: var(--cream);
+      padding: 4rem 2rem 3rem;
       display: flex; flex-direction: column; align-items: center;
-      text-align: center; gap: 0.5rem;
-      border-bottom: none;
+      text-align: center; gap: 0.75rem;
     }
 
     .hero img.hero-logo {
-      height: 260px;
-      width: auto;
-      margin-bottom: 0.75rem;
-      opacity: 0;
-      transform: scale(0);
+      height: 220px; width: auto;
+      margin-bottom: 0.5rem;
+      opacity: 0; transform: scale(0);
       animation: punchInLogo 0.7s cubic-bezier(0.18, 1.1, 0.32, 1) 0.2s forwards;
-      position: relative;
-      z-index: 3;
-
+      position: relative; z-index: 3;
     }
-
     @keyframes punchInLogo {
       0%   { opacity: 0; transform: scale(0) translateY(-40px); }
       55%  { opacity: 1; transform: scale(1.22) translateY(6px); }
@@ -68,263 +247,278 @@
 
     .logo-slam-wrap {
       position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 0.75rem;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 0.5rem;
     }
-
     #debrisCanvas {
-      position: absolute;
-      top: 50%;
-      left: 50%;
+      position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 0;
-      width: 500px;
-      height: 500px;
+      pointer-events: none; z-index: 0;
+      width: 500px; height: 500px;
     }
 
-    /* Market photos strip — framed */
-    /* Dark band wrapper */
-    .photos-band {
-      background: #1A1A1A;
-      border-top: 8px solid #7A4E2D;
-      border-bottom: 8px solid #7A4E2D;
-      padding: 2rem;
-      display: flex;
-      justify-content: center;
-    }
-    .hero-photos {
-      display: flex;
-      gap: 12px;
-      width: 100%;
-      max-width: 960px;
-    }
-    .hero-photo-wrap {
-      width: 50%;
-      overflow: hidden;
-      border-radius: 10px;
-      position: relative;
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      border: 2px solid #7A4E2D;
-    }
-    .hero-photo-wrap:hover {
-      transform: scale(1.03);
-      box-shadow: 0 12px 36px rgba(44,26,14,0.28);
-      z-index: 1;
-    }
-    .hero-photo-wrap img {
-      width: 100%;
-      height: 360px;
-      object-fit: cover;
-      object-position: center top;
-      display: block;
-      opacity: 0;
-      transform-origin: center center;
-      border-radius: 10px;
-    }
-    .hero-photo-wrap:nth-child(1) img {
-      animation:
-        fadeInPhoto 1.2s ease 0.4s forwards,
-        kenBurnsZoomIn 18s ease-in-out 0.4s infinite alternate;
-    }
-    .hero-photo-wrap:nth-child(2) img {
-      object-position: left top;
-      animation:
-        fadeInPhoto 1.2s ease 0.8s forwards,
-        kenBurnsPan 20s ease-in-out 0.8s infinite alternate;
-    }
-    @keyframes fadeInPhoto {
-      to { opacity: 1; }
-    }
-    @keyframes kenBurnsZoomIn {
-      0%   { transform: scale(1.0); }
-      100% { transform: scale(1.12); }
-    }
-    @keyframes kenBurnsPan {
-      0%   { transform: scale(1.1) translateX(0%); }
-      100% { transform: scale(1.1) translateX(-4%); }
-    }
-    @media (max-width: 600px) {
-      .hero-photos { flex-direction: column; padding: 8px; gap: 8px; }
-      .hero-photo-wrap { width: 100%; }
-      .hero-photo-wrap img { height: 220px; }
-    }
     .hero-tag {
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--cream); background: var(--brown);
+      padding: 6px 16px; border-radius: 6px;
+      font-family: 'Playfair Display', Georgia, serif; font-weight: 900;
+      border: 1px solid var(--dark-brown);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
 
-  color: #FAF4EB;
-  background: #7A4E2D;
-
-  padding: 6px 16px;
-  border-radius: 6px;
-
-  font-family: 'Playfair Display', Georgia, serif;
-  font-weight: 900;
-
-  border: 1px solid #5F3A1A;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-}
     .hero h1 {
       font-size: 38px; line-height: 1.2; color: #1A1A1A;
       max-width: 620px; font-family: 'Rye', cursive; font-weight: 900;
     }
-   .hero p {
-  color: #3E2A1A;
-  max-width: 520px;
-  line-height: 1.6;
-  font-family: 'Bebas Neue', cursive;
-  font-size: 17px;
-  letter-spacing: 0.08em;
-}
-    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 0.5rem; }
+    .hero p {
+      color: #3E2A1A; max-width: 520px; line-height: 1.6;
+      font-family: 'Bebas Neue', cursive; font-size: 17px; letter-spacing: 0.08em;
+    }
+
+    /* Hero trust strip */
+    .hero-trust {
+      display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+      margin-top: 0.25rem;
+    }
+    .hero-trust-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 700; color: var(--brown);
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+    .hero-trust-item span:first-child { font-size: 16px; }
+
+    .hero-btns {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      justify-content: center; margin-top: 0.5rem;
+    }
     .btn-primary {
-      background: #7A4E2D; color: #FAF4EB;
+      background: var(--brown); color: var(--cream);
       border: none; padding: 12px 26px; border-radius: 6px;
       font-size: 15px; cursor: pointer; text-decoration: none; display: inline-block;
       font-family: 'Lato', sans-serif; font-weight: 700;
+      transition: background 0.2s;
     }
-    .btn-primary:hover { background: #5F3A1A; }
+    .btn-primary:hover { background: var(--dark-brown); }
     .btn-secondary {
-      background: transparent; color: #7A4E2D;
-      border: 2px solid #7A4E2D; padding: 12px 26px; border-radius: 6px;
+      background: transparent; color: var(--brown);
+      border: 2px solid var(--brown); padding: 12px 26px; border-radius: 6px;
       font-size: 15px; cursor: pointer; text-decoration: none; display: inline-block;
       font-family: 'Lato', sans-serif; font-weight: 700;
+      transition: background 0.2s;
     }
     .btn-secondary:hover { background: #EDD8BB; }
 
-    /* ── PRODUCTS (white) ── */
+    /* ────────────────── PHOTOS BAND ────────────────── */
+    .photos-band {
+      background: #1A1A1A;
+      border-top: 8px solid var(--brown);
+      border-bottom: 8px solid var(--brown);
+      padding: 2rem; display: flex; justify-content: center;
+    }
+    .hero-photos { display: flex; gap: 12px; width: 100%; max-width: 960px; }
+    .hero-photo-wrap {
+      width: 50%; overflow: hidden; border-radius: 10px;
+      position: relative; transition: transform 0.4s ease, box-shadow 0.4s ease;
+      border: 2px solid var(--brown);
+    }
+    .hero-photo-wrap:hover {
+      transform: scale(1.03);
+      box-shadow: 0 12px 36px rgba(44,26,14,0.28); z-index: 1;
+    }
+    .hero-photo-wrap img {
+      width: 100%; height: 360px; object-fit: cover;
+      object-position: center top; display: block; opacity: 0;
+      transform-origin: center center; border-radius: 10px;
+    }
+    .hero-photo-wrap:nth-child(1) img {
+      animation: fadeInPhoto 1.2s ease 0.4s forwards, kenBurnsZoomIn 18s ease-in-out 0.4s infinite alternate;
+    }
+    .hero-photo-wrap:nth-child(2) img {
+      object-position: left top;
+      animation: fadeInPhoto 1.2s ease 0.8s forwards, kenBurnsPan 20s ease-in-out 0.8s infinite alternate;
+    }
+    @keyframes fadeInPhoto { to { opacity: 1; } }
+    @keyframes kenBurnsZoomIn { 0% { transform: scale(1.0); } 100% { transform: scale(1.12); } }
+    @keyframes kenBurnsPan { 0% { transform: scale(1.1) translateX(0%); } 100% { transform: scale(1.1) translateX(-4%); } }
+
+    /* ────────────────── PRODUCTS ────────────────── */
     .section-wrap-light {
       max-width: 1000px; margin: 0 auto; padding: 3rem 2rem;
-      background: #FAF4EB;
     }
-    .section-divider-light { border: none; border-top: 1px solid #D4B896; }
+    .section-divider-light { border: none; border-top: 1px solid var(--border); }
 
-    h2.light { font-size: 26px; font-weight: 900; margin-bottom: 0.4rem; color: #1A1A1A; font-family: 'Playfair Display', Georgia, serif; }
-    .section-sub.light { font-size: 14px; color: #7A4E2D; margin-bottom: 1.5rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; }
+    h2.light {
+      font-size: 26px; font-weight: 900; margin-bottom: 0.4rem;
+      color: #1A1A1A; font-family: 'Playfair Display', Georgia, serif;
+    }
+    .section-sub.light {
+      font-size: 14px; color: var(--brown); margin-bottom: 1.5rem;
+      letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700;
+    }
 
     .category-label {
       font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
-      color: #7A4E2D; margin: 1.75rem 0 0.75rem; font-weight: 700;
-      font-family: 'Lato', sans-serif;
+      color: var(--brown); margin: 1.75rem 0 0.75rem; font-weight: 700;
     }
+
     .products-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
       gap: 14px;
     }
     .product-card {
-      background: #fff;
-      border: 1px solid #D4B896;
-      border-radius: 10px;
-      padding: 0;
-      display: flex; flex-direction: column; justify-content: space-between;
-      overflow: hidden;
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .product-card:hover {
+      box-shadow: 0 6px 24px rgba(122,78,45,0.15);
+      transform: translateY(-2px);
     }
     .product-card-img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      display: block;
-      background: #EDD8BB;
-    }
-    .product-card-img-placeholder {
-      width: 100%;
-      height: 150px;
-      background: linear-gradient(135deg, #EDD8BB 0%, #D4B896 100%);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 32px;
+      width: 100%; height: 150px; object-fit: cover; display: block; background: #EDD8BB;
     }
     .product-card-body {
       padding: 1rem 1.1rem 1.1rem;
       display: flex; flex-direction: column; flex-grow: 1;
     }
     .product-card .name { font-size: 15px; font-weight: 700; color: #1A1A1A; margin-bottom: 4px; font-family: 'Playfair Display', Georgia, serif; }
-    .product-card .desc { font-size: 12px; color: #7A4E2D; flex-grow: 1; margin-bottom: 10px; line-height: 1.5; }
-    .product-card .price { font-size: 16px; font-weight: 700; color: #7A4E2D; }
+    .product-card .desc { font-size: 12px; color: var(--brown); flex-grow: 1; margin-bottom: 10px; line-height: 1.5; }
+    .product-card .price { font-size: 16px; font-weight: 700; color: var(--brown); }
 
-    /* ── BLACK HALF (order, about, contact) ── */
-    .black-half { background: #1A1A1A; }
-
-    .section-wrap-dark {
-      max-width: 1000px; margin: 0 auto; padding: 3rem 2rem;
+    .add-btn {
+      width: 100%;
+      background: var(--brown); color: var(--cream);
+      border: none; padding: 9px 0; border-radius: 6px;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      font-family: 'Lato', sans-serif; margin-top: 10px;
+      transition: background 0.2s;
     }
+    .add-btn:hover { background: var(--dark-brown); }
+    .add-btn.added { background: #3A7D44; }
+
+    /* ────────────────── BLACK HALF ────────────────── */
+    .black-half { background: #1A1A1A; }
+    .section-wrap-dark { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
     .section-divider-dark { border: none; border-top: 1px solid #3D3D3D; }
 
-    h2.dark { font-size: 26px; font-weight: 900; margin-bottom: 0.4rem; color: #FAF4EB; font-family: 'Playfair Display', Georgia, serif; }
-    .section-sub.dark { font-size: 14px; color: #D4A96A; margin-bottom: 1.5rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; }
+    h2.dark { font-size: 26px; font-weight: 900; margin-bottom: 0.4rem; color: var(--cream); font-family: 'Playfair Display', Georgia, serif; }
+    .section-sub.dark { font-size: 14px; color: var(--gold); margin-bottom: 1.5rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; }
 
-    /* Delivery */
     .delivery-box {
       background: #2E2E2E; border-radius: 10px; padding: 2rem;
       margin-bottom: 2rem; border: 1px solid #3D3D3D;
     }
-    .delivery-box h3 { font-size: 18px; margin-bottom: 1rem; color: #D4A96A; font-family: 'Playfair Display', Georgia, serif; font-weight: 700; }
+    .delivery-box h3 { font-size: 18px; margin-bottom: 1rem; color: var(--gold); font-family: 'Playfair Display', Georgia, serif; font-weight: 700; }
     .delivery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
     .delivery-card { background: #1A1A1A; border-radius: 8px; padding: 1rem; border: 1px solid #3D3D3D; }
-    .delivery-card .d-title { font-size: 14px; font-weight: 700; color: #D4A96A; margin-bottom: 6px; font-family: 'Lato', sans-serif; }
-    .delivery-card .d-detail { font-size: 13px; color: #B0957A; line-height: 1.6; }
+    .delivery-card .d-title { font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
+    .delivery-card .d-detail { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
-    /* Order form */
-    .order-form-wrap { background: #2E2E2E; border-radius: 10px; padding: 2rem; border: 1px solid #3D3D3D; }
-    .order-form-wrap p { font-size: 14px; color: #B0957A; margin-bottom: 1.25rem; line-height: 1.7; }
+    /* Call to action checkout box */
+    .checkout-cta-box {
+      background: linear-gradient(135deg, #2E2E2E 0%, #1A1A1A 100%);
+      border: 1px solid var(--brown);
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .checkout-cta-box p { color: var(--muted); font-size: 14px; margin-bottom: 1rem; line-height: 1.6; }
+    .btn-checkout {
+      display: inline-block;
+      background: var(--brown); color: var(--cream);
+      border: none; padding: 14px 36px; border-radius: 8px;
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      font-family: 'Lato', sans-serif; text-decoration: none;
+      letter-spacing: 0.04em; transition: background 0.2s;
+    }
+    .btn-checkout:hover { background: var(--dark-brown); }
+
+    /* Email order form */
+    .order-form-wrap {
+      background: #2E2E2E; border-radius: 10px; padding: 2rem; border: 1px solid #3D3D3D;
+    }
+    .order-form-wrap p { font-size: 14px; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.7; }
     .order-form { display: flex; flex-direction: column; gap: 10px; }
-    .order-form input,
-    .order-form select,
-    .order-form textarea {
+    .order-form input, .order-form select, .order-form textarea {
       padding: 10px 14px; border-radius: 7px;
       border: 1px solid #3D3D3D; font-size: 14px;
-      background: #1A1A1A; color: #FAF4EB; font-family: 'Lato', Arial, sans-serif;
+      background: #1A1A1A; color: var(--cream);
+      font-family: 'Lato', Arial, sans-serif;
     }
     .order-form textarea { resize: vertical; min-height: 90px; }
     .order-form input:focus, .order-form select:focus, .order-form textarea:focus {
-      outline: none; border-color: #D4A96A;
+      outline: none; border-color: var(--gold);
     }
-    .order-form input::placeholder,
-    .order-form textarea::placeholder { color: #888; }
+    .order-form input::placeholder, .order-form textarea::placeholder { color: #888; }
 
     /* About */
-    .about-text { font-size: 15px; color: #B0957A; line-height: 1.8; max-width: 720px; }
+    .about-text { font-size: 15px; color: var(--muted); line-height: 1.8; max-width: 720px; }
     .about-text p + p { margin-top: 1rem; }
     .badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 1.25rem; }
     .badge {
       font-size: 12px; padding: 5px 14px; border-radius: 20px;
-      background: #2E2E2E; color: #D4A96A; font-weight: 700;
+      background: #2E2E2E; color: var(--gold); font-weight: 700;
       border: 1px solid #3D3D3D;
     }
 
     /* Contact */
     .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
     .contact-card { background: #2E2E2E; border-radius: 10px; padding: 1.1rem; border: 1px solid #3D3D3D; }
-    .contact-card .label {
-      font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
-      color: #D4A96A; margin-bottom: 6px; font-weight: 700;
-    }
-    .contact-card .value { font-size: 14px; font-weight: 700; color: #FAF4EB; line-height: 1.5; }
+    .contact-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 6px; font-weight: 700; }
+    .contact-card .value { font-size: 14px; font-weight: 700; color: var(--cream); line-height: 1.5; }
 
     /* Footer */
     footer {
       text-align: center; padding: 2rem;
-      font-size: 13px; color: #B0957A;
+      font-size: 13px; color: var(--muted);
       background: #1A1A1A;
-      border-top: 3px solid #7A4E2D;
+      border-top: 3px solid var(--brown);
     }
-    footer img {
-      height: 48px; width: auto; filter: brightness(0) invert(1);
-      display: block; margin: 0 auto 0.75rem; opacity: 0.5;
+    footer img { height: 48px; width: auto; filter: brightness(0) invert(1); display: block; margin: 0 auto 0.75rem; opacity: 0.5; }
+
+    /* ────────────────── TOAST POPUP ────────────────── */
+    #popup {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--black); color: var(--cream);
+      padding: 12px 18px; border-radius: 8px;
+      opacity: 0; transform: translateY(20px);
+      transition: all 0.3s ease; z-index: 500;
+      font-size: 14px; border-left: 3px solid var(--brown);
+      pointer-events: none;
     }
 
-   @media (max-width: 540px) {
-  .hero h1 { font-size: 28px; }
-  nav { flex-direction: column; gap: 0.75rem; padding: 1rem; }
+    /* ────────────────── MOBILE ────────────────── */
+    @media (max-width: 600px) {
+      nav { padding: 0.75rem 1rem; gap: 0; }
+      .nav-links { gap: 0.75rem; }
+      .nav-links a { font-size: 12px; }
+      #cart-nav-btn span.cart-label { display: none; }
 
-  .hero img.hero-logo {
-    height: 180px;
-  }
-}
+      .hero { padding: 2.5rem 1rem 2rem; gap: 0.6rem; }
+      .hero img.hero-logo { height: 160px; }
+      .hero h1 { font-size: 26px; }
+      .hero p { font-size: 15px; }
+      .hero-trust { gap: 12px; }
+
+      .photos-band { padding: 1rem; }
+      .hero-photos { flex-direction: column; gap: 8px; }
+      .hero-photo-wrap { width: 100%; }
+      .hero-photo-wrap img { height: 220px; }
+
+      .section-wrap-light { padding: 2rem 1rem; }
+      .section-wrap-dark { padding: 2rem 1rem; }
+
+      .products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+
+      #cart-drawer { width: 100vw; }
+    }
+
+    @media (max-width: 380px) {
+      .products-grid { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -339,8 +533,42 @@
       <a href="#order">ORDER</a>
       <a href="#about">ABOUT</a>
       <a href="#contact">CONTACT</a>
+      <button id="cart-nav-btn" onclick="openCart()">
+        🛒 <span class="cart-label">Cart</span>
+        <span id="cart-nav-badge"></span>
+      </button>
     </div>
   </nav>
+
+  <!-- CART DRAWER -->
+  <div id="cart-overlay" onclick="closeCart()"></div>
+  <div id="cart-drawer">
+    <div class="drawer-header">
+      <h3>Your Order</h3>
+      <button id="drawer-close" onclick="closeCart()">✕</button>
+    </div>
+    <div id="drawer-items">
+      <div class="drawer-empty" id="drawer-empty">
+        <div class="empty-icon">🥩</div>
+        <div>Your cart is empty.<br />Add some cuts to get started!</div>
+      </div>
+    </div>
+    <div class="drawer-footer" id="drawer-footer" style="display:none;">
+      <div class="drawer-subtotal">
+        <span>Subtotal</span>
+        <span id="drawer-subtotal-val">$0</span>
+      </div>
+      <div class="drawer-subtotal" style="font-size:12px;color:#444;">
+        <span>Delivery fee calculated at checkout</span>
+      </div>
+      <div class="drawer-total">
+        <span>Subtotal</span>
+        <span id="drawer-total-val">$0</span>
+      </div>
+      <a href="checkout.html" id="checkout-btn">Proceed to Checkout →</a>
+      <p class="drawer-note">🔒 Secure checkout via Stripe</p>
+    </div>
+  </div>
 
   <!-- HERO -->
   <div class="hero">
@@ -351,9 +579,17 @@
     <div class="hero-tag">Est. 2023 &nbsp;·&nbsp; Muskoka, Ontario</div>
     <h1>Grass-fed. Non-GMO. Ontario Raised.</h1>
     <p>Fresh, premium cuts brought directly to farmers markets across Muskoka and now delivered to your door.</p>
+
+    <div class="hero-trust">
+      <div class="hero-trust-item"><span>🌿</span><span>Grass-fed &amp; Finished</span></div>
+      <div class="hero-trust-item"><span>🚫</span><span>Non-GMO</span></div>
+      <div class="hero-trust-item"><span>🍁</span><span>Ontario Raised</span></div>
+      <div class="hero-trust-item"><span>🚚</span><span>Delivery Available</span></div>
+    </div>
+
     <div class="hero-btns">
-      <a href="#order" class="btn-primary">Place an order</a>
-      <a href="#products" class="btn-secondary">See our products</a>
+      <a href="#products" class="btn-primary">Shop Now</a>
+      <a href="#about" class="btn-secondary">Our Story</a>
     </div>
   </div>
 
@@ -369,160 +605,150 @@
     </div>
   </div>
 
-  <!-- PRODUCTS (white half) -->
+  <!-- PRODUCTS -->
   <hr class="section-divider-light" />
   <div class="section-wrap-light" id="products">
     <h2 class="light">OUR PRODUCTS</h2>
     <p class="section-sub light">Grass-fed beef · Non-GMO chicken · Ontario pork · Ontario Lamb</p>
 
-    <div class="category-label"> BEEF</div>
+    <div class="category-label">🐄 BEEF</div>
     <div class="products-grid">
       <div class="product-card">
-        <img src="striploin.jpeg" class="product-card-img">
+        <img src="striploin.jpeg" class="product-card-img" alt="New York Striploin" />
         <div class="product-card-body">
           <div class="name">New York Striploin</div>
           <div class="desc">12oz · Grass-fed &amp; finished Ontario beef</div>
           <div class="price">$30</div>
-          <button onclick="addToCart('New York Striploin', 30, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('New York Striploin', 30, this)">Add to Order</button>
         </div>
       </div>
-
       <div class="product-card">
-        <img src="ribeye.jpg" class="product-card-img">
+        <img src="ribeye.jpg" class="product-card-img" alt="Ribeye Steak" />
         <div class="product-card-body">
           <div class="name">Ribeye Steak</div>
           <div class="desc">12oz · Grass-fed &amp; finished Ontario beef</div>
           <div class="price">$30</div>
-          <button onclick="addToCart('Ribeye Steak', 30, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Ribeye Steak', 30, this)">Add to Order</button>
         </div>
       </div>
-
       <div class="product-card">
-        <img src="tomahawk.jpg" class="product-card-img">
+        <img src="tomahawk.jpg" class="product-card-img" alt="Tomahawk Steak" />
         <div class="product-card-body">
           <div class="name">Tomahawk Steak</div>
           <div class="desc">Ontario grass-fed — the showstopper cut</div>
           <div class="price">$75</div>
-          <button onclick="addToCart('Tomahawk Steak', 75, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Tomahawk Steak', 75, this)">Add to Order</button>
         </div>
       </div>
-
       <div class="product-card">
-       <img src="primeribburger.jpeg" class="product-card-img">
+        <img src="primeribburger.jpeg" class="product-card-img" alt="Prime Rib Burgers" />
         <div class="product-card-body">
           <div class="name">Prime Rib Burgers</div>
           <div class="desc">4-pack · Rich, beefy flavour</div>
           <div class="price">$20</div>
-          <button onclick="addToCart('Prime Rib Burgers', 20, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Prime Rib Burgers', 20, this)">Add to Order</button>
         </div>
       </div>
-
       <div class="product-card">
-       <img src="chuck and brisket burger.jpg" class="product-card-img">
+        <img src="chuck and brisket burger.jpg" class="product-card-img" alt="Wagyu Burgers" />
         <div class="product-card-body">
           <div class="name">Wagyu Burgers</div>
           <div class="desc">2-pack · Premium marbled wagyu beef</div>
           <div class="price">$20</div>
-          <button onclick="addToCart('Waygu Burgers', 20, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Wagyu Burgers', 20, this)">Add to Order</button>
         </div>
       </div>
-
       <div class="product-card">
-        <img src="waygu burger.jpg" class="product-card-img">
+        <img src="waygu burger.jpg" class="product-card-img" alt="Chuck & Brisket Burgers" />
         <div class="product-card-body">
           <div class="name">Chuck &amp; Brisket Burgers</div>
           <div class="desc">4-pack · Slow-cooked flavour profile</div>
           <div class="price">$20</div>
-          <button onclick="addToCart('Chuck & Brisket Burgers', 20, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Chuck & Brisket Burgers', 20, this)">Add to Order</button>
         </div>
       </div>
     </div>
 
-    <div class="category-label"> CHICKEN</div>
+    <div class="category-label">🐔 CHICKEN</div>
     <div class="products-grid">
       <div class="product-card">
-        <img src="chicken wings.jpg" class="product-card-img">
+        <img src="chicken wings.jpg" class="product-card-img" alt="Chicken Wings" />
         <div class="product-card-body">
           <div class="name">Split Tip Chicken Wings</div>
           <div class="desc">1lb · Non-GMO, Ontario raised</div>
           <div class="price">$20</div>
-          <button onclick="addToCart('Chicken Wings', 20, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Split Tip Chicken Wings', 20, this)">Add to Order</button>
         </div>
       </div>
-
       <div class="product-card">
-        <img src="chicken breast.jpg" class="product-card-img">
+        <img src="chicken breast.jpg" class="product-card-img" alt="Organic Chicken Breast" />
         <div class="product-card-body">
           <div class="name">Organic Chicken Breast</div>
           <div class="desc">2-pack · Non-GMO organic Ontario chicken</div>
           <div class="price">$20</div>
-          <button onclick="addToCart('Chicken Breast', 20, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Organic Chicken Breast', 20, this)">Add to Order</button>
         </div>
       </div>
     </div>
 
-    <div class="category-label"> PORK</div>
+    <div class="category-label">🐷 PORK</div>
     <div class="products-grid">
       <div class="product-card">
-        <img src="pork ribs.jpg" class="product-card-img">
+        <img src="pork ribs.jpg" class="product-card-img" alt="Pork Back Ribs" />
         <div class="product-card-body">
           <div class="name">Pork Back Ribs</div>
           <div class="desc">Full rack · Ontario pork</div>
           <div class="price">$30</div>
-          <button onclick="addToCart('Pork Back Ribs', 30, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Pork Back Ribs', 30, this)">Add to Order</button>
         </div>
       </div>
-
       <div class="product-card">
-        <img src="bacon.jpg" class="product-card-img">
+        <img src="bacon.jpg" class="product-card-img" alt="Thick Cut Bacon" />
         <div class="product-card-body">
           <div class="name">Smoked Thick Cut Breakfast Bacon</div>
           <div class="desc">Thick-cut, smoky, and rich</div>
           <div class="price">$20</div>
-          <button onclick="addToCart('Thick Cut Breakfast Bacon', 20, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Thick Cut Breakfast Bacon', 20, this)">Add to Order</button>
         </div>
       </div>
-
       <div class="product-card">
-        <img src="honey garlic.jpg" class="product-card-img">
+        <img src="honey garlic.jpg" class="product-card-img" alt="Honey Garlic Sausage" />
         <div class="product-card-body">
           <div class="name">Honey Garlic Sausage</div>
           <div class="desc">4-pack · Sweet and savoury</div>
           <div class="price">$15</div>
-          <button onclick="addToCart('Honey Garlic Sausage', 15, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Honey Garlic Sausage', 15, this)">Add to Order</button>
         </div>
       </div>
-
       <div class="product-card">
-        <img src="chorizo.jpg" class="product-card-img">
+        <img src="chorizo.jpg" class="product-card-img" alt="Chorizo Sausage" />
         <div class="product-card-body">
           <div class="name">Chorizo Sausage</div>
           <div class="desc">4-pack · Bold and smoky</div>
           <div class="price">$15</div>
-          <button onclick="addToCart('Chorizo Sausage', 15, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Chorizo Sausage', 15, this)">Add to Order</button>
         </div>
       </div>
-
       <div class="product-card">
-        <img src="spicy italian.jpg" class="product-card-img">
+        <img src="spicy italian.jpg" class="product-card-img" alt="Spicy Italian Sausage" />
         <div class="product-card-body">
           <div class="name">Spicy Italian Sausage</div>
           <div class="desc">4-pack · Classic Italian heat</div>
           <div class="price">$15</div>
-          <button onclick="addToCart('Classic Italian Heat', 15, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Spicy Italian Sausage', 15, this)">Add to Order</button>
         </div>
       </div>
     </div>
 
-    <div class="category-label"> LAMB</div>
+    <div class="category-label">🐑 LAMB</div>
     <div class="products-grid">
       <div class="product-card">
-        <img src="lamb loin chop.jpg" class="product-card-img">
+        <img src="lamb loin chop.jpg" class="product-card-img" alt="Lamb Loin Chops" />
         <div class="product-card-body">
           <div class="name">Lamb Loin Chops</div>
           <div class="desc">4-pack · Ontario lamb</div>
           <div class="price">$40</div>
-          <button onclick="addToCart('Lamb Loin Chops', 40, this)" class="btn-primary" style="margin-top:10px;">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Lamb Loin Chops', 40, this)">Add to Order</button>
         </div>
       </div>
     </div>
@@ -533,71 +759,62 @@
 
     <!-- ORDER -->
     <div class="section-wrap-dark" id="order">
-      <h2 class="dark">Order for delivery</h2>
+      <h2 class="dark">Order for Delivery</h2>
       <p class="section-sub dark">24-hour notice required on all orders</p>
 
       <div class="delivery-box">
-        <h3>Delivery info</h3>
+        <h3>Delivery Info</h3>
         <div class="delivery-grid">
           <div class="delivery-card">
-            <div class="d-title">Standard delivery</div>
-            <div class="d-detail">$20 delivery fee on Orders Within 100km of Orillia, ON</div>
+            <div class="d-title">Standard Delivery</div>
+            <div class="d-detail">$20 delivery fee within 100km of Orillia, ON</div>
           </div>
           <div class="delivery-card">
-            <div class="d-title">Outside 100km</div>
-            <div class="d-detail">$40 delivery fee on orders outside 100km of Orillia, ON</div>
+            <div class="d-title">Extended Delivery</div>
+            <div class="d-detail">$40 delivery fee outside 100km of Orillia, ON</div>
           </div>
           <div class="delivery-card">
-            <div class="d-title">Market pickup</div>
-            <div class="d-detail">Find us at farmers markets throughout Ontario, no delivery fee, preorder for market pickup</div>
+            <div class="d-title">Market Pickup</div>
+            <div class="d-detail">Find us at farmers markets throughout Ontario — no delivery fee</div>
           </div>
         </div>
       </div>
 
-<div id="cart" style="margin-bottom:20px;">
-  <h3 style="color:#D4A96A;">Your Order</h3>
-  <div id="cart-items" style="color:#1A1A1A; font-size:14px; margin-bottom:10px;">
-    No items yet
-  </div>
-  <div id="cart-total" style="color:#D4A96A; font-weight:700;">
-    Total: $0
-  </div>
-</div>
+      <!-- Stripe checkout CTA -->
+      <div class="checkout-cta-box">
+        <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:20px;color:var(--cream);margin-bottom:0.5rem;">Ready to Order?</h3>
+        <p>Add items to your cart and pay securely with credit card, debit, or Apple Pay.<br>We'll confirm your delivery details within 24 hours.</p>
+        <a href="checkout.html" class="btn-checkout" id="cta-checkout-btn">🛒 Go to Checkout</a>
+      </div>
 
-
+      <!-- Fallback email order -->
       <div class="order-form-wrap">
-  <p>Fill out the form below and we'll get back to you within 24 hours to confirm your order and arrange delivery or pickup. Please place all orders at least 24 hours in advance.</p>
-
-  <form class="order-form" onsubmit="sendOrder(event)">
-    <input type="text" id="name" placeholder="Your name" required />
-    <input type="tel" id="phone" placeholder="Phone number" required />
-    <input type="email" id="email" placeholder="Email address" required />
-    <input type="text" id="address" placeholder="Your location / delivery address" required />
-
-    <select id="method" required>
-      <option value="">Delivery or pickup?</option>
-      <option>Delivery</option>
-      <option>Market pickup</option>
-    </select>
-
-    <textarea id="order" placeholder="What products are you looking for? List cuts and quantities." required></textarea>
-
-    <button type="submit" class="btn-primary" style="align-self: flex-start;">
-      Place Order
-    </button>
-  </form>
-</div>
+        <p>Prefer to order by email? Fill out the form below and we'll get back to you to confirm your order and arrange delivery or pickup.</p>
+        <form class="order-form" onsubmit="sendOrder(event)">
+          <input type="text" id="name" placeholder="Your name" required />
+          <input type="tel" id="phone" placeholder="Phone number" required />
+          <input type="email" id="email" placeholder="Email address" required />
+          <input type="text" id="address" placeholder="Your location / delivery address" required />
+          <select id="method" required>
+            <option value="">Delivery or pickup?</option>
+            <option>Delivery</option>
+            <option>Market pickup</option>
+          </select>
+          <textarea id="order-notes" placeholder="What products are you looking for? List cuts and quantities." required></textarea>
+          <button type="submit" class="btn-primary" style="align-self:flex-start;">Send Order →</button>
+        </form>
+      </div>
+    </div>
 
     <hr class="section-divider-dark" />
 
     <!-- ABOUT -->
     <div class="section-wrap-dark" id="about">
-      <h2 class="dark">About us</h2>
+      <h2 class="dark">About Us</h2>
       <p class="section-sub dark">Est. 2023 · Muskoka, Ontario</p>
       <div class="about-text">
-        <p>Gmac's Fresh Meat was started in 2023 as a summer business when i was at my first year at western university. with a simple passion: bringing fresh, honest, Ontario-raised meat directly to the Farmers Markets of Muskoka.</p>
-        <p>Every product we sell is grass-fed and finished beef, non-GMO chicken, or sourced from trusted Ontario farms. No mystery, just quality meat at a fair price, brought to you in cottage country. 
-</p>
+        <p>Gmac's Fresh Meat was started in 2023 as a summer business when I was in my first year at Western University, with a simple passion: bringing fresh, honest, Ontario-raised meat directly to the farmers markets of Muskoka.</p>
+        <p>Every product we sell is grass-fed and finished beef, non-GMO chicken, or sourced from trusted Ontario farms. No mystery — just quality meat at a fair price, brought to you in cottage country.</p>
       </div>
       <div class="badges">
         <span class="badge">Grass-fed &amp; finished beef</span>
@@ -619,15 +836,15 @@
           <div class="value">gmacswholesale@gmail.com</div>
         </div>
         <div class="contact-card">
-          <div class="label">Phone Number</div>
+          <div class="label">Phone</div>
           <div class="value">705-955-1667</div>
         </div>
         <div class="contact-card">
-          <div class="label">Delivery area</div>
+          <div class="label">Delivery Area</div>
           <div class="value">Within 100km of Orillia, ON</div>
         </div>
         <div class="contact-card">
-          <div class="label">Order notice</div>
+          <div class="label">Order Notice</div>
           <div class="value">24 hours required on all orders</div>
         </div>
       </div>
@@ -641,242 +858,200 @@
     © 2026 Gmac's Fresh Meat · Muskoka, Ontario · Est. 2023
   </footer>
 
-<div id="popup" style="
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #1A1A1A;
-  color: #FAF4EB;
-  padding: 12px 18px;
-  border-radius: 8px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.3s ease;
-  z-index: 100;
-  font-size: 14px;
-">
-  Added to order
-</div>
+  <!-- TOAST -->
+  <div id="popup"></div>
 
   <script>
+    // ─── CART STATE ───
+    let cart = JSON.parse(localStorage.getItem("gmacs_cart") || "[]");
 
-let cart = [];
-
-function addToCart(name, price, btn) {
-  const existing = cart.find(item => item.name === name);
-
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ name, price, qty: 1 });
-  }
-
-  updateCart();
-
-const popup = document.getElementById("popup");
-if (popup) {
-  popup.style.opacity = "1";
-  popup.style.transform = "translateY(0)";
-  popup.innerText = `${name} added`;
-
-  setTimeout(() => {
-    popup.style.opacity = "0";
-    popup.style.transform = "translateY(20px)";
-  }, 1200);
-}
-
-  if (btn) {
-    btn.innerText = "Added ✓";
-    btn.style.background = "#4CAF50";
-
-    setTimeout(() => {
-      btn.innerText = "Add to Order";
-      btn.style.background = "#7A4E2D";
-    }, 1000);
-  }
-
-  const cartBox = document.getElementById("cart");
-  if (cartBox) {
-    cartBox.style.transform = "scale(1.08)";
-cartBox.style.transition = "transform 0.15s ease";
-    setTimeout(() => {
-      cartBox.style.transform = "scale(1)";
-    }, 200);
-  }
-}
-
-function updateCart() {
-  const cartItems = document.getElementById("cart-items");
-  const cartTotal = document.getElementById("cart-total");
-
-  if (cart.length === 0) {
-    cartItems.innerHTML = "No items yet";
-    cartTotal.innerHTML = "Total: $0";
-    return;
-  }
-
-  let total = 0;
-
-  cartItems.innerHTML = cart.map(item => {
-    total += item.price * item.qty;
-    return `${item.name} x${item.qty}`;
-  }).join("<br>");
-
-  cartTotal.innerHTML = `Total: $${total}`;
-}
-
-function sendOrder(e) {
-  e.preventDefault();
-
-  const name = document.getElementById("name").value;
-  const phone = document.getElementById("phone").value;
-  const email = document.getElementById("email").value;
-  const address = document.getElementById("address").value;
-  const method = document.getElementById("method").value;
-
-  let order = "";
-
-  if (cart.length === 0) {
-    order = document.getElementById("order").value;
-  } else {
-    order = cart.map(item => `${item.name} x${item.qty}`).join("\n");
-  }
-
-  const subject = "New Order - Gmac's Fresh Meat";
-
-  const body =
-`NEW ORDER REQUEST
-
-Name: ${name}
-Phone: ${phone}
-Email: ${email}
-
-Method: ${method}
-Address: ${address}
-
-Order Details:
-${order}
-
-------------------------
-Sent from website`;
-
-  window.location.href =
-    `mailto:gmacswholesale@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
-</script>
-
-<script>
-(function() {
-  const SLAM_DELAY = 0.52;
-
-  function rnd(a, b) { return a + Math.random() * (b - a); }
-
-  function launch() {
-    // Screen shake
-    const hero = document.querySelector('.hero');
-    if (hero) {
-      hero.classList.add('hero-shake');
-      setTimeout(() => hero.classList.remove('hero-shake'), 500);
+    function saveCart() {
+      localStorage.setItem("gmacs_cart", JSON.stringify(cart));
     }
 
-    const canvas = document.getElementById("debrisCanvas");
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    const W = canvas.width  = 500;
-    const H = canvas.height = 500;
-    const cx = W / 2, cy = H / 2;
-
-    /* ── DUST PUFFS ── */
-    const dustPuffs = [];
-    const DUST_COUNT = 55;
-    for (let i = 0; i < DUST_COUNT; i++) {
-      const goLeft = Math.random() < 0.5;
-      const angle = goLeft ? Math.PI - rnd(0.1, 0.55) : rnd(0.1, 0.55);
-      const speed = rnd(0.6, 3.2);
-      dustPuffs.push({
-        x: cx + rnd(-30, 30),
-        y: cy + rnd(-20, 20),
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed - rnd(0.5, 2.5),
-        radius: rnd(20, 65),
-        alpha: rnd(0.55, 0.85),
-        grow: rnd(2.5, 5.5),
-        decay: rnd(0.025, 0.05),
-        colour: Math.random() < 0.5 ? "120,90,60" : "180,155,120"
-      });
-    }
-
-    /* ── ROCK CHUNKS ── */
-    const chunks = [];
-    const CHUNK_COUNT = 32;
-    for (let i = 0; i < CHUNK_COUNT; i++) {
-      const goLeft = Math.random() < 0.5;
-      const angle = goLeft ? Math.PI - rnd(0.1, 0.55) : rnd(0.1, 0.55);
-      const speed = rnd(7, 18);
-      const size  = rnd(10, 28);
-      // irregular polygon points
-      const sides = Math.floor(rnd(4, 7));
-      const poly  = [];
-      for (let s = 0; s < sides; s++) {
-        const a = (s / sides) * Math.PI * 2 + rnd(-0.3, 0.3);
-        const r = size * rnd(0.5, 1.0);
-        poly.push({x: Math.cos(a) * r, y: Math.sin(a) * r});
-      }
-      const colours = ["#5F3A1A","#7A4E2D","#3D2010","#A0754A","#8B6040","#2C1A0E","#C4A882"];
-      chunks.push({
-        x: cx, y: cy,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed * 0.25 - rnd(1, 3),
-        rotation: rnd(0, Math.PI * 2),
-        rotSpeed: rnd(-0.18, 0.18),
-        poly,
-        colour: colours[Math.floor(Math.random() * colours.length)],
-        alpha: 1,
-        gravity: rnd(0.12, 0.28),
-        decay: rnd(0.006, 0.014)
-      });
-    }
-
-    const START = performance.now();
-
-    function animate(now) {
-      ctx.clearRect(0, 0, W, H);
-
-      // Dust puffs
-      let dustAlive = false;
-      for (const d of dustPuffs) {
-        if (d.alpha <= 0) continue;
-        dustAlive = true;
-        d.x += d.vx;
-        d.y += d.vy;
-        d.vy += 0.04;
-        d.vx *= 0.98;
-        d.radius += d.grow;
-        d.alpha  -= d.decay;
-        ctx.save();
-        const grad = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.radius);
-        grad.addColorStop(0,   `rgba(${d.colour},${d.alpha * 0.7})`);
-        grad.addColorStop(0.5, `rgba(${d.colour},${d.alpha * 0.3})`);
-        grad.addColorStop(1,   `rgba(${d.colour},0)`);
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, d.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
-
-      if (dustAlive) {
-        requestAnimationFrame(animate);
+    // ─── ADD TO CART ───
+    function addToCart(name, price, btn) {
+      const existing = cart.find(i => i.name === name);
+      if (existing) {
+        existing.qty += 1;
       } else {
-        ctx.clearRect(0, 0, W, H);
+        cart.push({ name, price, qty: 1 });
+      }
+      saveCart();
+      renderDrawer();
+      updateNavBadge();
+      showToast(`${name} added to cart`);
+      openCart();
+
+      if (btn) {
+        btn.textContent = "Added ✓";
+        btn.classList.add("added");
+        setTimeout(() => {
+          btn.textContent = "Add to Order";
+          btn.classList.remove("added");
+        }, 1200);
       }
     }
 
-    requestAnimationFrame(animate);
-  }
+    // ─── QTY CONTROLS ───
+    function changeQty(name, delta) {
+      const item = cart.find(i => i.name === name);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.name !== name);
+      }
+      saveCart();
+      renderDrawer();
+      updateNavBadge();
+    }
 
-  setTimeout(launch, SLAM_DELAY * 1000);
-})();
-</script>
+    // ─── RENDER DRAWER ───
+    function renderDrawer() {
+      const itemsEl = document.getElementById("drawer-items");
+      const footerEl = document.getElementById("drawer-footer");
+      const emptyEl = document.getElementById("drawer-empty");
+
+      if (cart.length === 0) {
+        emptyEl.style.display = "block";
+        footerEl.style.display = "none";
+        // Clear any item rows
+        const rows = itemsEl.querySelectorAll(".drawer-item");
+        rows.forEach(r => r.remove());
+        return;
+      }
+
+      emptyEl.style.display = "none";
+      footerEl.style.display = "block";
+
+      // Rebuild items
+      const rows = itemsEl.querySelectorAll(".drawer-item");
+      rows.forEach(r => r.remove());
+
+      cart.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "drawer-item";
+        div.innerHTML = `
+          <div class="drawer-item-info">
+            <div class="drawer-item-name">${item.name}</div>
+            <div class="drawer-item-price">$${(item.price * item.qty).toFixed(2)}</div>
+          </div>
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="changeQty('${item.name.replace(/'/g,"\\'")}', -1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty('${item.name.replace(/'/g,"\\'")}', 1)">+</button>
+          </div>
+        `;
+        itemsEl.insertBefore(div, emptyEl);
+      });
+
+      const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      document.getElementById("drawer-subtotal-val").textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById("drawer-total-val").textContent = `$${subtotal.toFixed(2)}`;
+    }
+
+    // ─── NAV BADGE ───
+    function updateNavBadge() {
+      const badge = document.getElementById("cart-nav-badge");
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      if (total > 0) {
+        badge.textContent = total;
+        badge.classList.add("visible");
+      } else {
+        badge.classList.remove("visible");
+      }
+    }
+
+    // ─── DRAWER OPEN/CLOSE ───
+    function openCart() {
+      document.getElementById("cart-overlay").classList.add("open");
+      document.getElementById("cart-drawer").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+    function closeCart() {
+      document.getElementById("cart-overlay").classList.remove("open");
+      document.getElementById("cart-drawer").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    // ─── TOAST ───
+    function showToast(msg) {
+      const popup = document.getElementById("popup");
+      popup.textContent = msg;
+      popup.style.opacity = "1";
+      popup.style.transform = "translateY(0)";
+      clearTimeout(popup._timer);
+      popup._timer = setTimeout(() => {
+        popup.style.opacity = "0";
+        popup.style.transform = "translateY(20px)";
+      }, 1800);
+    }
+
+    // ─── EMAIL FALLBACK ORDER ───
+    function sendOrder(e) {
+      e.preventDefault();
+      const name    = document.getElementById("name").value;
+      const phone   = document.getElementById("phone").value;
+      const email   = document.getElementById("email").value;
+      const address = document.getElementById("address").value;
+      const method  = document.getElementById("method").value;
+      const notes   = document.getElementById("order-notes").value;
+
+      const cartSummary = cart.length > 0
+        ? cart.map(i => `${i.name} x${i.qty}`).join("\n")
+        : notes;
+
+      const body = `NEW ORDER REQUEST\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nMethod: ${method}\nAddress: ${address}\n\nOrder Details:\n${cartSummary}\n\n------------------------\nSent from website`;
+
+      window.location.href = `mailto:gmacswholesale@gmail.com?subject=${encodeURIComponent("New Order - Gmac's Fresh Meat")}&body=${encodeURIComponent(body)}`;
+    }
+
+    // ─── INIT ───
+    renderDrawer();
+    updateNavBadge();
+  </script>
+
+  <!-- HERO ANIMATION -->
+  <script>
+  (function() {
+    const SLAM_DELAY = 0.52;
+    function rnd(a, b) { return a + Math.random() * (b - a); }
+    function launch() {
+      const hero = document.querySelector('.hero');
+      if (hero) { hero.classList.add('hero-shake'); setTimeout(() => hero.classList.remove('hero-shake'), 500); }
+      const canvas = document.getElementById("debrisCanvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const W = canvas.width = 500, H = canvas.height = 500;
+      const cx = W / 2, cy = H / 2;
+      const dustPuffs = [];
+      for (let i = 0; i < 55; i++) {
+        const goLeft = Math.random() < 0.5;
+        const angle = goLeft ? Math.PI - rnd(0.1, 0.55) : rnd(0.1, 0.55);
+        const speed = rnd(0.6, 3.2);
+        dustPuffs.push({ x: cx + rnd(-30, 30), y: cy + rnd(-20, 20), vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed - rnd(0.5, 2.5), radius: rnd(20, 65), alpha: rnd(0.55, 0.85), grow: rnd(2.5, 5.5), decay: rnd(0.025, 0.05), colour: Math.random() < 0.5 ? "120,90,60" : "180,155,120" });
+      }
+      function animate() {
+        ctx.clearRect(0, 0, W, H);
+        let alive = false;
+        for (const d of dustPuffs) {
+          if (d.alpha <= 0) continue;
+          alive = true;
+          d.x += d.vx; d.y += d.vy; d.vy += 0.04; d.vx *= 0.98; d.radius += d.grow; d.alpha -= d.decay;
+          ctx.save();
+          const g = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.radius);
+          g.addColorStop(0, `rgba(${d.colour},${d.alpha * 0.7})`);
+          g.addColorStop(0.5, `rgba(${d.colour},${d.alpha * 0.3})`);
+          g.addColorStop(1, `rgba(${d.colour},0)`);
+          ctx.fillStyle = g; ctx.beginPath(); ctx.arc(d.x, d.y, d.radius, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+        }
+        if (alive) requestAnimationFrame(animate); else ctx.clearRect(0, 0, W, H);
+      }
+      requestAnimationFrame(animate);
+    }
+    setTimeout(launch, SLAM_DELAY * 1000);
+  })();
+  </script>
+
 </body>
 </html>
