@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout – Gmac's Fresh Meat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@400;700&family=Rye&display=swap" rel="stylesheet" />
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #FAF4EB;
+      --brown:    #7A4E2D;
+      --dark-brown: #5F3A1A;
+      --black:    #1A1A1A;
+      --charcoal: #2E2E2E;
+      --border:   #D4B896;
+      --gold:     #D4A96A;
+      --muted:    #B0957A;
+      --text:     #2C1A0E;
+      --green:    #3A7D44;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: #FAF4EB;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 2rem;
+      background: var(--cream);
+      border-bottom: 2px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .nav-logo img { height: 52px; width: auto; }
+    .nav-back {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brown);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-back:hover { color: var(--dark-brown); }
+
+    /* ── CHECKOUT HEADER ── */
+    .checkout-header {
+      background: var(--black);
+      border-bottom: 4px solid var(--brown);
+      padding: 2rem 2rem 1.75rem;
+      text-align: center;
+    }
+    .checkout-header h1 {
+      font-family: 'Rye', cursive;
+      font-size: 28px;
+      color: var(--cream);
+      margin-bottom: 4px;
+    }
+    .checkout-header p {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .checkout-main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 760px) {
+      .checkout-main {
+        grid-template-columns: 1fr;
+        padding: 1.5rem 1rem 3rem;
+      }
+      /* Show order summary first on mobile */
+      .order-summary { order: -1; }
+    }
+
+    /* ── SHARED CARD ── */
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .card-header {
+      background: var(--black);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-header h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: 0.02em;
+    }
+    .card-header .step-badge {
+      width: 24px; height: 24px;
+      background: var(--brown);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--cream);
+      flex-shrink: 0;
+    }
+    .card-body { padding: 1.5rem; }
+
+    /* ── CONTACT + DELIVERY FORM ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .form-grid .full { grid-column: 1 / -1; }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--brown);
+      margin-bottom: 5px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-size: 14px;
+      font-family: 'Lato', sans-serif;
+      background: #FEFCF8;
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--brown);
+    }
+    input::placeholder { color: #B0A090; }
+
+    .delivery-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 0;
+    }
+    .delivery-opt {
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #FEFCF8;
+      position: relative;
+    }
+    .delivery-opt input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0; height: 0;
+    }
+    .delivery-opt.selected {
+      border-color: var(--brown);
+      background: #FFF5EA;
+    }
+    .delivery-opt .opt-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .delivery-opt .opt-detail {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .delivery-opt .opt-price {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brown);
+      margin-top: 4px;
+    }
+
+    /* ── ORDER SUMMARY ── */
+    .order-summary { position: sticky; top: 80px; }
+
+    #summary-items { list-style: none; }
+    #summary-items li {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid #F0E8DC;
+      font-size: 14px;
+      gap: 8px;
+    }
+    #summary-items li:last-child { border-bottom: none; }
+    .item-name { font-weight: 700; color: var(--text); }
+    .item-qty { font-size: 12px; color: var(--muted); }
+    .item-price { font-weight: 700; color: var(--brown); white-space: nowrap; }
+
+    .summary-totals {
+      border-top: 2px solid var(--border);
+      padding-top: 1rem;
+      margin-top: 0.5rem;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .summary-row.total {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--black);
+      margin-top: 6px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+    .summary-row.total span:last-child { color: var(--brown); }
+
+    .empty-cart-msg {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .empty-cart-msg a {
+      color: var(--brown);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    /* ── STRIPE PAYMENT ELEMENT ── */
+    #payment-element-wrap {
+      padding: 0;
+    }
+    #payment-element {
+      /* Stripe injects its iframe here */
+    }
+
+    /* ── TRUST BADGES ── */
+    .trust-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .trust-badge {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #F0E8DC;
+      color: var(--brown);
+      font-weight: 700;
+      border: 1px solid var(--border);
+    }
+
+    /* ── PAY BUTTON ── */
+    #pay-btn {
+      width: 100%;
+      background: var(--brown);
+      color: var(--cream);
+      border: none;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Lato', sans-serif;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    #pay-btn:hover:not(:disabled) { background: var(--dark-brown); }
+    #pay-btn:active:not(:disabled) { transform: scale(0.99); }
+    #pay-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .pay-lock { font-size: 16px; }
+
+    #payment-message {
+      color: #c0392b;
+      font-size: 13px;
+      margin-top: 10px;
+      text-align: center;
+      min-height: 18px;
+    }
+
+    .stripe-note {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    /* ── STEPS DIVIDER ── */
+    .section-gap { height: 1.25rem; }
+
+    /* ── SUCCESS STATE ── */
+    #success-screen {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+    #success-screen .checkmark {
+      font-size: 64px;
+      margin-bottom: 1rem;
+    }
+    #success-screen h2 {
+      font-family: 'Rye', cursive;
+      font-size: 26px;
+      color: var(--green);
+      margin-bottom: 0.5rem;
+    }
+    #success-screen p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 400px;
+      margin: 0 auto 1.5rem;
+    }
+    #success-screen a {
+      display: inline-block;
+      background: var(--brown);
+      color: var(--cream);
+      padding: 12px 28px;
+      border-radius: 7px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* ── LOADER ── */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── NOTICE BOX ── */
+    .notice-box {
+      background: #FFF5EA;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--brown);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    .notice-box strong { display: block; margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <img src="GMACs_Fresh_Meat_logo_2024.png" alt="Gmac's Fresh Meat" />
+    </div>
+    <a href="index.html" class="nav-back">← Back to shop</a>
+  </nav>
+
+  <!-- CHECKOUT HEADER -->
+  <div class="checkout-header">
+    <h1>Secure Checkout</h1>
+    <p>Gmac's Fresh Meat &nbsp;·&nbsp; Muskoka, Ontario</p>
+  </div>
+
+  <!-- SUCCESS SCREEN (hidden until payment succeeds) -->
+  <div id="success-screen" style="max-width:600px;margin:0 auto;">
+    <div class="checkmark">✅</div>
+    <h2>Order Confirmed!</h2>
+    <p>Thank you for your order! We'll reach out within 24 hours to confirm your delivery details. Check your email for a receipt.</p>
+    <a href="index.html">Back to shop</a>
+  </div>
+
+  <!-- CHECKOUT LAYOUT -->
+  <div class="checkout-main" id="checkout-form-area">
+
+    <!-- LEFT: Contact + Delivery + Payment -->
+    <div class="checkout-left">
+
+      <!-- Contact Info -->
+      <div class="card">
+        <div class="card-header">
+          <div class="step-badge">1</div>
+          <h2>Contact Information</h2>
+        </div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div>
+              <label for="first-name">First Name</label>
+              <input type="text" id="first-name" placeholder="John" required />
+            </div>
+            <div>
+              <label for="last-name">Last Name</label>
+              <input type="text" id="last-name" placeholder="Smith" required />
+            </div>
+            <div class="full">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" placeholder="john@example.com" required />
+            </div>
+            <div class="full">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" placeholder="705-555-0100" required />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-gap"></div>
+
+      <!-- Delivery Method -->
+      <div class="card">
+        <div class="card-header">
+          <div class="step-badge">2</div>
+          <h2>Delivery Method</h2>
+        </div>
+        <div class="card-body">
+          <div class="notice-box">
+            <strong>📅 24-hour notice required on all orders</strong>
+            We'll contact you to confirm your delivery window after payment.
+          </div>
+
+          <div class="delivery-options">
+            <label class="delivery-opt selected" id="opt-standard">
+              <input type="radio" name="delivery" value="standard" checked onchange="selectDelivery('standard')" />
+              <div class="opt-title">Standard Delivery</div>
+              <div class="opt-detail">Within 100km of Orillia, ON</div>
+              <div class="opt-price">+$20</div>
+            </label>
+            <label class="delivery-opt" id="opt-extended">
+              <input type="radio" name="delivery" value="extended" onchange="selectDelivery('extended')" />
+              <div class="opt-title">Extended Delivery</div>
+              <div class="opt-detail">Outside 100km of Orillia, ON</div>
+              <div class="opt-price">+$40</div>
+            </label>
+            <label class="delivery-opt" id="opt-pickup">
+              <input type="radio" name="delivery" value="pickup" onchange="selectDelivery('pickup')" />
+              <div class="opt-title">Market Pickup</div>
+              <div class="opt-detail">Farmers markets across Ontario</div>
+              <div class="opt-price">Free</div>
+            </label>
+          </div>
+
+          <div id="address-wrap" style="margin-top:1rem;">
+            <label for="address">Delivery Address</label>
+            <input type="text" id="address" placeholder="123 Main St, Barrie, ON" />
+          </div>
+        </div>
+      </div>
+
+      <div class="section-gap"></div>
+
+      <!-- Payment -->
+      <div class="card">
+        <div class="card-header">
+          <div class="step-badge">3</div>
+          <h2>Payment</h2>
+        </div>
+        <div class="card-body">
+          <div id="payment-element-wrap">
+            <div id="payment-element"></div>
+          </div>
+
+          <!-- Loading state for Stripe -->
+          <div id="stripe-loading" style="text-align:center;padding:2rem;color:var(--muted);font-size:13px;">
+            Loading secure payment form…
+          </div>
+
+          <div id="payment-message"></div>
+
+          <button id="pay-btn" disabled>
+            <span class="pay-lock">🔒</span>
+            <span id="pay-btn-text">Pay Now</span>
+            <div class="spinner" id="pay-spinner"></div>
+          </button>
+
+          <p class="stripe-note">
+            🔒 Secured by Stripe &nbsp;·&nbsp; Your card details are never stored
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: Order Summary -->
+    <div class="checkout-right order-summary">
+      <div class="card">
+        <div class="card-header">
+          <h2 style="font-size:15px;">Your Order</h2>
+        </div>
+        <div class="card-body">
+
+          <div id="empty-msg" class="empty-cart-msg" style="display:none;">
+            Your cart is empty. <a href="index.html">Go back to shop</a>
+          </div>
+
+          <ul id="summary-items"></ul>
+
+          <div class="summary-totals" id="summary-totals">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="subtotal-val">$0</span>
+            </div>
+            <div class="summary-row">
+              <span>Delivery</span>
+              <span id="delivery-val">$20</span>
+            </div>
+            <div class="summary-row total">
+              <span>Total</span>
+              <span id="total-val">$0</span>
+            </div>
+          </div>
+
+          <div class="trust-row">
+            <span class="trust-badge">Grass-fed &amp; Finished</span>
+            <span class="trust-badge">Ontario Raised</span>
+            <span class="trust-badge">Non-GMO</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end checkout-main -->
+
+  <script>
+    // ─────────────────────────────────────────────
+    // CONFIGURATION — replace with your actual keys
+    // ─────────────────────────────────────────────
+    const STRIPE_PUBLISHABLE_KEY = "pk_test_YOUR_PUBLISHABLE_KEY_HERE";
+    // Your Netlify function URL (auto-works on Netlify, change for local dev)
+    const CREATE_PAYMENT_INTENT_URL = "/.netlify/functions/create-payment-intent";
+
+    // ─────────────────────────────────────────────
+    // DELIVERY FEES
+    // ─────────────────────────────────────────────
+    const DELIVERY_FEES = {
+      standard: 20,
+      extended: 40,
+      pickup: 0,
+    };
+
+    let deliveryMethod = "standard";
+    let cart = [];
+    let stripe, elements, paymentElement;
+
+    // ─────────────────────────────────────────────
+    // LOAD CART FROM localStorage
+    // ─────────────────────────────────────────────
+    function loadCart() {
+      try {
+        const stored = localStorage.getItem("gmacs_cart");
+        cart = stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        cart = [];
+      }
+
+      renderSummary();
+
+      if (cart.length === 0) {
+        document.getElementById("empty-msg").style.display = "block";
+        document.getElementById("summary-items").style.display = "none";
+        document.getElementById("summary-totals").style.display = "none";
+        document.getElementById("pay-btn").disabled = true;
+      } else {
+        initStripe();
+      }
+    }
+
+    // ─────────────────────────────────────────────
+    // RENDER ORDER SUMMARY
+    // ─────────────────────────────────────────────
+    function getSubtotal() {
+      return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    }
+
+    function getTotal() {
+      return getSubtotal() + DELIVERY_FEES[deliveryMethod];
+    }
+
+    function renderSummary() {
+      const list = document.getElementById("summary-items");
+      list.innerHTML = cart.map(item => `
+        <li>
+          <div>
+            <div class="item-name">${item.name}</div>
+            <div class="item-qty">× ${item.qty}</div>
+          </div>
+          <div class="item-price">$${(item.price * item.qty).toFixed(2)}</div>
+        </li>
+      `).join("");
+
+      const subtotal = getSubtotal();
+      const fee = DELIVERY_FEES[deliveryMethod];
+      const total = subtotal + fee;
+
+      document.getElementById("subtotal-val").textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById("delivery-val").textContent = fee === 0 ? "Free" : `$${fee.toFixed(2)}`;
+      document.getElementById("total-val").textContent = `$${total.toFixed(2)}`;
+      document.getElementById("pay-btn-text").textContent = `Pay $${total.toFixed(2)}`;
+    }
+
+    // ─────────────────────────────────────────────
+    // DELIVERY SELECTION
+    // ─────────────────────────────────────────────
+    function selectDelivery(method) {
+      deliveryMethod = method;
+
+      // Update selected styling
+      ["standard", "extended", "pickup"].forEach(m => {
+        document.getElementById(`opt-${m}`).classList.remove("selected");
+      });
+      document.getElementById(`opt-${method}`).classList.add("selected");
+
+      // Show/hide address field
+      document.getElementById("address-wrap").style.display =
+        method === "pickup" ? "none" : "block";
+
+      renderSummary();
+    }
+
+    // ─────────────────────────────────────────────
+    // INIT STRIPE
+    // ─────────────────────────────────────────────
+    async function initStripe() {
+      stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+
+      const total = getTotal();
+
+      let clientSecret;
+      try {
+        const res = await fetch(CREATE_PAYMENT_INTENT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: total,
+            items: cart,
+          }),
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        clientSecret = data.clientSecret;
+      } catch (err) {
+        document.getElementById("stripe-loading").textContent =
+          "Could not load payment form. Please try again or contact us directly.";
+        console.error(err);
+        return;
+      }
+
+      // Mount Stripe Elements
+      elements = stripe.elements({
+        clientSecret,
+        appearance: {
+          theme: "stripe",
+          variables: {
+            colorPrimary: "#7A4E2D",
+            colorBackground: "#FEFCF8",
+            colorText: "#2C1A0E",
+            colorDanger: "#c0392b",
+            fontFamily: "Lato, sans-serif",
+            borderRadius: "7px",
+          },
+        },
+      });
+
+      paymentElement = elements.create("payment");
+      paymentElement.mount("#payment-element");
+
+      paymentElement.on("ready", () => {
+        document.getElementById("stripe-loading").style.display = "none";
+        document.getElementById("pay-btn").disabled = false;
+      });
+    }
+
+    // ─────────────────────────────────────────────
+    // SUBMIT PAYMENT
+    // ─────────────────────────────────────────────
+    document.getElementById("pay-btn").addEventListener("click", async () => {
+      if (!stripe || !elements) return;
+
+      // Basic validation
+      const firstName = document.getElementById("first-name").value.trim();
+      const lastName  = document.getElementById("last-name").value.trim();
+      const email     = document.getElementById("email").value.trim();
+      const phone     = document.getElementById("phone").value.trim();
+
+      if (!firstName || !lastName || !email || !phone) {
+        showMessage("Please fill in all contact information.");
+        return;
+      }
+
+      if (deliveryMethod !== "pickup") {
+        const address = document.getElementById("address").value.trim();
+        if (!address) {
+          showMessage("Please enter your delivery address.");
+          return;
+        }
+      }
+
+      setLoading(true);
+
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: window.location.origin + "/checkout.html?success=true",
+          receipt_email: email,
+          payment_method_data: {
+            billing_details: {
+              name: `${firstName} ${lastName}`,
+              email,
+              phone,
+            },
+          },
+        },
+        redirect: "if_required",
+      });
+
+      if (error) {
+        showMessage(error.message);
+        setLoading(false);
+      } else {
+        // Payment succeeded without redirect
+        onPaymentSuccess();
+      }
+    });
+
+    function onPaymentSuccess() {
+      localStorage.removeItem("gmacs_cart");
+      document.getElementById("checkout-form-area").style.display = "none";
+      document.getElementById("success-screen").style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showMessage(msg) {
+      const el = document.getElementById("payment-message");
+      el.textContent = msg;
+      setTimeout(() => { el.textContent = ""; }, 6000);
+    }
+
+    function setLoading(isLoading) {
+      const btn = document.getElementById("pay-btn");
+      const spinner = document.getElementById("pay-spinner");
+      const btnText = document.getElementById("pay-btn-text");
+      btn.disabled = isLoading;
+      spinner.style.display = isLoading ? "block" : "none";
+      btnText.textContent = isLoading ? "Processing…" : `Pay $${getTotal().toFixed(2)}`;
+    }
+
+    // ─────────────────────────────────────────────
+    // HANDLE RETURN FROM STRIPE REDIRECT
+    // ─────────────────────────────────────────────
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("success") === "true") {
+      document.addEventListener("DOMContentLoaded", () => {
+        onPaymentSuccess();
+      });
+    }
+
+    // ─────────────────────────────────────────────
+    // BOOT
+    // ─────────────────────────────────────────────
+    document.addEventListener("DOMContentLoaded", loadCart);
+  </script>
+
+</body>
+</html>
