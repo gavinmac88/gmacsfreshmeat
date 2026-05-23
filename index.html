@@ -20,6 +20,10 @@
       --text:     #2C1A0E;
     }
 
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+    }
     body {
       font-family: 'Lato', Arial, sans-serif;
       color: var(--text);
@@ -492,32 +496,76 @@
 
     /* ────────────────── MOBILE ────────────────── */
     @media (max-width: 600px) {
-      nav { padding: 0.75rem 1rem; gap: 0; }
-      .nav-links { gap: 0.75rem; }
+      /* Nav — stack logo on top, links below, fully centred */
+      nav {
+        flex-direction: column;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        gap: 0.6rem;
+        text-align: center;
+      }
+      .nav-links {
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+      }
       .nav-links a { font-size: 12px; }
-      #cart-nav-btn span.cart-label { display: none; }
+      #cart-nav-btn { font-size: 13px; padding: 7px 14px; }
+      #cart-nav-btn span.cart-label { display: inline; }
 
-      .hero { padding: 2.5rem 1rem 2rem; gap: 0.6rem; }
-      .hero img.hero-logo { height: 160px; }
-      .hero h1 { font-size: 26px; }
-      .hero p { font-size: 15px; }
-      .hero-trust { gap: 12px; }
+      /* Hero — centred, better spacing */
+      .hero {
+        padding: 2rem 1.25rem 1.75rem;
+        gap: 0.6rem;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+      }
+      .hero img.hero-logo { height: 150px; }
+      .hero h1 { font-size: 24px; max-width: 100%; }
+      .hero p { font-size: 14px; max-width: 100%; }
+      .hero-trust {
+        gap: 10px;
+        justify-content: center;
+        width: 100%;
+      }
+      .hero-trust-item { font-size: 11px; }
+      .hero-btns { width: 100%; justify-content: center; }
+      .hero-btns a { flex: 1; text-align: center; }
 
+      /* Photos */
       .photos-band { padding: 1rem; }
       .hero-photos { flex-direction: column; gap: 8px; }
       .hero-photo-wrap { width: 100%; }
-      .hero-photo-wrap img { height: 220px; }
+      .hero-photo-wrap img { height: 200px; }
 
-      .section-wrap-light { padding: 2rem 1rem; }
-      .section-wrap-dark { padding: 2rem 1rem; }
+      /* Sections */
+      .section-wrap-light { padding: 1.75rem 1.25rem; }
+      .section-wrap-dark { padding: 1.75rem 1.25rem; }
 
-      .products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+      /* Products grid — 2 columns on mobile */
+      .products-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .product-card-img { height: 120px; }
+      .product-card-body { padding: 0.75rem; }
+      .product-card .name { font-size: 13px; }
+      .product-card .desc { font-size: 11px; }
+      .product-card .price { font-size: 14px; }
+      .add-btn { font-size: 12px; padding: 8px 0; }
 
+      /* Delivery grid */
+      .delivery-grid { grid-template-columns: 1fr; }
+
+      /* Cart drawer full width */
       #cart-drawer { width: 100vw; }
+
+      /* Contact grid */
+      .contact-grid { grid-template-columns: 1fr 1fr; }
     }
 
-    @media (max-width: 380px) {
-      .products-grid { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 360px) {
+      .products-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .hero h1 { font-size: 21px; }
     }
   </style>
 </head>
@@ -578,12 +626,13 @@
     </div>
     <div class="hero-tag">Est. 2023 &nbsp;·&nbsp; Muskoka, Ontario</div>
     <h1>Grass-fed. Non-GMO. Ontario Raised.</h1>
+    <p>Fresh, premium cuts brought directly to farmers markets across Muskoka and now delivered to your door.</p>
 
     <div class="hero-trust">
-      <div class="hero-trust-item"><span></span><span>Grass-fed &amp; Finished</span></div>
-      <div class="hero-trust-item"><span></span><span>Non-GMO</span></div>
-      <div class="hero-trust-item"><span></span><span>Ontario Raised</span></div>
-      <div class="hero-trust-item"><span></span><span>Delivery Available</span></div>
+      <div class="hero-trust-item"><span>🌿</span><span>Grass-fed &amp; Finished</span></div>
+      <div class="hero-trust-item"><span>🚫</span><span>Non-GMO</span></div>
+      <div class="hero-trust-item"><span>🍁</span><span>Ontario Raised</span></div>
+      <div class="hero-trust-item"><span>🚚</span><span>Delivery Available</span></div>
     </div>
 
     <div class="hero-btns">
@@ -596,7 +645,7 @@
   <div class="photos-band">
     <div class="hero-photos">
       <div class="hero-photo-wrap">
-        <img src="IMG_7777.jpeg" alt="Gmac's Fresh Meat at the farmers market" />
+        <img src="IMG_7471.jpeg" alt="Gmac's Fresh Meat at the farmers market" />
       </div>
       <div class="hero-photo-wrap">
         <img src="IMG_7470.jpeg" alt="Gmac's Fresh Meat selling at the market" />
@@ -610,7 +659,7 @@
     <h2 class="light">OUR PRODUCTS</h2>
     <p class="section-sub light">Grass-fed beef · Non-GMO chicken · Ontario pork · Ontario Lamb</p>
 
-    <div class="category-label"> BEEF</div>
+    <div class="category-label">🐄 BEEF</div>
     <div class="products-grid">
       <div class="product-card">
         <img src="striploin.jpeg" class="product-card-img" alt="New York Striploin" />
@@ -668,7 +717,7 @@
       </div>
     </div>
 
-    <div class="category-label"> CHICKEN</div>
+    <div class="category-label">🐔 CHICKEN</div>
     <div class="products-grid">
       <div class="product-card">
         <img src="chicken wings.jpg" class="product-card-img" alt="Chicken Wings" />
@@ -690,7 +739,7 @@
       </div>
     </div>
 
-    <div class="category-label"> PORK</div>
+    <div class="category-label">🐷 PORK</div>
     <div class="products-grid">
       <div class="product-card">
         <img src="pork ribs.jpg" class="product-card-img" alt="Pork Back Ribs" />
@@ -739,7 +788,7 @@
       </div>
     </div>
 
-    <div class="category-label"> LAMB</div>
+    <div class="category-label">🐑 LAMB</div>
     <div class="products-grid">
       <div class="product-card">
         <img src="lamb loin chop.jpg" class="product-card-img" alt="Lamb Loin Chops" />
@@ -759,7 +808,7 @@
     <!-- ORDER -->
     <div class="section-wrap-dark" id="order">
       <h2 class="dark">Order for Delivery</h2>
-      <p class="section-sub dark">24-hour notice required on all orders</p>
+      <p class="section-sub dark">48-hour notice required on all orders</p>
 
       <div class="delivery-box">
         <h3>Delivery Info</h3>
@@ -782,7 +831,7 @@
       <!-- Stripe checkout CTA -->
       <div class="checkout-cta-box">
         <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:20px;color:var(--cream);margin-bottom:0.5rem;">Ready to Order?</h3>
-        <p>Add items to your cart and pay securely with credit card, debit, or Apple Pay.<br>We'll confirm your delivery details within 24 hours.</p>
+        <p>Add items to your cart and pay securely with credit card, debit, or Apple Pay.<br>We'll confirm your delivery details within 48 hours.</p>
         <a href="checkout.html" class="btn-checkout" id="cta-checkout-btn">🛒 Go to Checkout</a>
       </div>
 
@@ -812,8 +861,8 @@
       <h2 class="dark">About Us</h2>
       <p class="section-sub dark">Est. 2023 · Muskoka, Ontario</p>
       <div class="about-text">
-        <p>Gmac's Fresh Meat was started in 2022 as a summer business when I was in my first year at Western University, with a simple passion: bringing fresh, honest, Ontario-raised meat directly to the farmers markets and door steps of Muskoka.</p>
-        <p>Every product we sell is grass-fed and finished beef, non-GMO chicken, or sourced from trusted Ontario farms. No mystery just quality meat at a fair price, brought to you in cottage country.</p>
+        <p>Gmac's Fresh Meat was started in 2023 as a summer business when I was in my first year at Western University, with a simple passion: bringing fresh, honest, Ontario-raised meat directly to the farmers markets of Muskoka.</p>
+        <p>Every product we sell is grass-fed and finished beef, non-GMO chicken, or sourced from trusted Ontario farms. No mystery — just quality meat at a fair price, brought to you in cottage country.</p>
       </div>
       <div class="badges">
         <span class="badge">Grass-fed &amp; finished beef</span>
@@ -844,7 +893,7 @@
         </div>
         <div class="contact-card">
           <div class="label">Order Notice</div>
-          <div class="value">24 hours required on all orders</div>
+          <div class="value">48 hours required on all orders</div>
         </div>
       </div>
     </div>
