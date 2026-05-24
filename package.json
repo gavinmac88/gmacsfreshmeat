@@ -1,7 +1,7 @@
 {
   "name": "gmacs-fresh-meat",
   "version": "1.0.0",
-  "description": "Gmac's Fresh Meat website with Stripe checkout",
+  "type": "module",
   "dependencies": {
     "stripe": "^14.0.0"
   }
