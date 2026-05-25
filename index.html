@@ -20,17 +20,10 @@
       --text:     #2C1A0E;
     }
 
-    html, body {
-      overflow-x: hidden;
-      width: 100%;
-    }
-    body {
-      font-family: 'Lato', Arial, sans-serif;
-      color: var(--text);
-      background: var(--cream);
-    }
+    html, body { overflow-x: hidden; width: 100%; }
+    body { font-family: 'Lato', Arial, sans-serif; color: var(--text); background: var(--cream); }
 
-    /* ────────────────── NAV ────────────────── */
+    /* ── NAV ── */
     nav {
       display: flex; justify-content: space-between; align-items: center;
       padding: 0.75rem 2rem;
@@ -40,182 +33,58 @@
     }
     .nav-logo img { height: 60px; width: auto; }
     .nav-links { display: flex; gap: 1.5rem; align-items: center; }
-    .nav-links a {
-      font-size: 14px; color: var(--text); text-decoration: none;
-      font-family: 'Lato', sans-serif; letter-spacing: 0.05em; font-weight: 700;
-    }
+    .nav-links a { font-size: 14px; color: var(--text); text-decoration: none; font-family: 'Lato', sans-serif; letter-spacing: 0.05em; font-weight: 700; }
     .nav-links a:hover { color: var(--brown); }
-
-    /* Cart icon in nav */
     #cart-nav-btn {
-      position: relative;
-      background: var(--brown);
-      color: var(--cream);
-      border: none;
-      border-radius: 8px;
-      padding: 8px 16px;
-      font-size: 14px;
-      font-weight: 700;
-      font-family: 'Lato', sans-serif;
-      cursor: pointer;
-      display: flex; align-items: center; gap: 8px;
-      transition: background 0.2s;
+      position: relative; background: var(--brown); color: var(--cream);
+      border: none; border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: 700;
+      font-family: 'Lato', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s;
     }
     #cart-nav-btn:hover { background: var(--dark-brown); }
     #cart-nav-badge {
-      display: none;
-      position: absolute;
-      top: -6px; right: -6px;
-      background: #E05C2A;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      width: 20px; height: 20px;
-      border-radius: 50%;
-      align-items: center; justify-content: center;
+      display: none; position: absolute; top: -6px; right: -6px;
+      background: #E05C2A; color: #fff; font-size: 11px; font-weight: 700;
+      width: 20px; height: 20px; border-radius: 50%; align-items: center; justify-content: center;
     }
     #cart-nav-badge.visible { display: flex; }
 
-    /* ────────────────── CART DRAWER ────────────────── */
-    #cart-overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 300;
-      backdrop-filter: blur(2px);
-    }
+    /* ── CART DRAWER ── */
+    #cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; backdrop-filter: blur(2px); }
     #cart-overlay.open { display: block; }
-
     #cart-drawer {
-      position: fixed;
-      top: 0; right: 0;
-      width: min(420px, 100vw);
-      height: 100dvh;
-      background: var(--black);
-      z-index: 400;
-      display: flex;
-      flex-direction: column;
-      transform: translateX(110%);
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      position: fixed; top: 0; right: 0; width: min(420px, 100vw); height: 100dvh;
+      background: var(--black); z-index: 400; display: flex; flex-direction: column;
+      transform: translateX(110%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
       border-left: 3px solid var(--brown);
     }
     #cart-drawer.open { transform: translateX(0); }
-
-    .drawer-header {
-      padding: 1.25rem 1.5rem;
-      border-bottom: 1px solid #3D3D3D;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .drawer-header h3 {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 18px;
-      color: var(--cream);
-      font-weight: 900;
-    }
-    #drawer-close {
-      background: none; border: none;
-      color: var(--muted); font-size: 22px; cursor: pointer; line-height: 1;
-      transition: color 0.2s;
-    }
+    .drawer-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid #3D3D3D; display: flex; justify-content: space-between; align-items: center; }
+    .drawer-header h3 { font-family: 'Playfair Display', Georgia, serif; font-size: 18px; color: var(--cream); font-weight: 900; }
+    #drawer-close { background: none; border: none; color: var(--muted); font-size: 22px; cursor: pointer; line-height: 1; transition: color 0.2s; }
     #drawer-close:hover { color: var(--cream); }
-
-    #drawer-items {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1rem 1.5rem;
-    }
+    #drawer-items { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
     #drawer-items::-webkit-scrollbar { width: 4px; }
     #drawer-items::-webkit-scrollbar-thumb { background: #3D3D3D; border-radius: 2px; }
-
-    .drawer-empty {
-      text-align: center;
-      padding: 3rem 1rem;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.7;
-    }
+    .drawer-empty { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 14px; line-height: 1.7; }
     .drawer-empty .empty-icon { font-size: 42px; margin-bottom: 0.75rem; }
-
-    .drawer-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid #2E2E2E;
-    }
+    .drawer-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #2E2E2E; }
     .drawer-item:last-child { border-bottom: none; }
     .drawer-item-info { flex: 1; }
-    .drawer-item-name {
-      font-size: 14px; font-weight: 700; color: var(--cream);
-      font-family: 'Playfair Display', Georgia, serif;
-    }
-    .drawer-item-price {
-      font-size: 13px; color: var(--gold); margin-top: 2px;
-    }
-    .qty-controls {
-      display: flex; align-items: center; gap: 8px;
-    }
-    .qty-btn {
-      width: 28px; height: 28px;
-      background: #2E2E2E; border: 1px solid #3D3D3D;
-      border-radius: 6px; color: var(--cream); font-size: 16px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s;
-      font-family: 'Lato', sans-serif;
-    }
+    .drawer-item-name { font-size: 14px; font-weight: 700; color: var(--cream); font-family: 'Playfair Display', Georgia, serif; }
+    .drawer-item-price { font-size: 13px; color: var(--gold); margin-top: 2px; }
+    .qty-controls { display: flex; align-items: center; gap: 8px; }
+    .qty-btn { width: 28px; height: 28px; background: #2E2E2E; border: 1px solid #3D3D3D; border-radius: 6px; color: var(--cream); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
     .qty-btn:hover { background: var(--brown); }
     .qty-num { font-size: 14px; font-weight: 700; color: var(--cream); min-width: 20px; text-align: center; }
-
-    .drawer-footer {
-      padding: 1.25rem 1.5rem;
-      border-top: 1px solid #3D3D3D;
-      background: #111;
-    }
-    .drawer-subtotal {
-      display: flex; justify-content: space-between;
-      font-size: 14px; color: var(--muted);
-      margin-bottom: 6px;
-    }
-    .drawer-total {
-      display: flex; justify-content: space-between;
-      font-size: 18px; font-weight: 700;
-      color: var(--cream);
-      margin-bottom: 1rem;
-      padding-top: 8px;
-      border-top: 1px solid #3D3D3D;
-    }
+    .drawer-footer { padding: 1.25rem 1.5rem; border-top: 1px solid #3D3D3D; background: #111; }
+    .drawer-subtotal { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 6px; }
+    .drawer-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; color: var(--cream); margin-bottom: 1rem; padding-top: 8px; border-top: 1px solid #3D3D3D; }
     .drawer-total span:last-child { color: var(--gold); }
-
-    #checkout-btn {
-      display: block;
-      width: 100%;
-      background: var(--brown);
-      color: var(--cream);
-      border: none;
-      padding: 14px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 700;
-      font-family: 'Lato', sans-serif;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      letter-spacing: 0.04em;
-      transition: background 0.2s;
-    }
+    #checkout-btn { display: block; width: 100%; background: var(--brown); color: var(--cream); border: none; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: 700; font-family: 'Lato', sans-serif; cursor: pointer; text-align: center; text-decoration: none; letter-spacing: 0.04em; transition: background 0.2s; }
     #checkout-btn:hover { background: var(--dark-brown); }
-    #checkout-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .drawer-note { font-size: 11px; color: #555; text-align: center; margin-top: 8px; }
 
-    .drawer-note {
-      font-size: 11px;
-      color: #555;
-      text-align: center;
-      margin-top: 8px;
-    }
-
-    /* ────────────────── HERO ────────────────── */
+    /* ── HERO ── */
     @keyframes screenShake {
       0%   { transform: translate(0,0) rotate(0deg); }
       15%  { transform: translate(-5px, 4px) rotate(-0.4deg); }
@@ -226,21 +95,8 @@
       100% { transform: translate(0,0) rotate(0deg); }
     }
     .hero-shake { animation: screenShake 0.5s ease forwards; }
-
-    .hero {
-      background: var(--cream);
-      padding: 4rem 2rem 3rem;
-      display: flex; flex-direction: column; align-items: center;
-      text-align: center; gap: 0.75rem;
-    }
-
-    .hero img.hero-logo {
-      height: 220px; width: auto;
-      margin-bottom: 0.5rem;
-      opacity: 0; transform: scale(0);
-      animation: punchInLogo 0.7s cubic-bezier(0.18, 1.1, 0.32, 1) 0.2s forwards;
-      position: relative; z-index: 3;
-    }
+    .hero { background: var(--cream); padding: 4rem 2rem 3rem; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.75rem; }
+    .hero img.hero-logo { height: 220px; width: auto; margin-bottom: 0.5rem; opacity: 0; transform: scale(0); animation: punchInLogo 0.7s cubic-bezier(0.18, 1.1, 0.32, 1) 0.2s forwards; position: relative; z-index: 3; }
     @keyframes punchInLogo {
       0%   { opacity: 0; transform: scale(0) translateY(-40px); }
       55%  { opacity: 1; transform: scale(1.22) translateY(6px); }
@@ -248,321 +104,137 @@
       85%  { transform: scale(1.06) translateY(0px); }
       100% { opacity: 1; transform: scale(1) translateY(0px); }
     }
-
-    .logo-slam-wrap {
-      position: relative;
-      display: inline-flex; align-items: center; justify-content: center;
-      margin-bottom: 0.5rem;
-    }
-    #debrisCanvas {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none; z-index: 0;
-      width: 500px; height: 500px;
-    }
-
-    .hero-tag {
-      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--cream); background: var(--brown);
-      padding: 6px 16px; border-radius: 6px;
-      font-family: 'Playfair Display', Georgia, serif; font-weight: 900;
-      border: 1px solid var(--dark-brown);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-    }
-
-    .hero h1 {
-      font-size: 38px; line-height: 1.2; color: #1A1A1A;
-      max-width: 620px; font-family: 'Rye', cursive; font-weight: 900;
-    }
-    .hero p {
-      color: #3E2A1A; max-width: 520px; line-height: 1.6;
-      font-family: 'Bebas Neue', cursive; font-size: 17px; letter-spacing: 0.08em;
-    }
-
-    /* Hero trust strip */
-    .hero-trust {
-      display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
-      margin-top: 0.25rem;
-    }
-    .hero-trust-item {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 12px; font-weight: 700; color: var(--brown);
-      letter-spacing: 0.05em; text-transform: uppercase;
-    }
+    .logo-slam-wrap { position: relative; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.5rem; }
+    #debrisCanvas { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 0; width: 500px; height: 500px; }
+    .hero-tag { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cream); background: var(--brown); padding: 6px 16px; border-radius: 6px; font-family: 'Playfair Display', Georgia, serif; font-weight: 900; border: 1px solid var(--dark-brown); box-shadow: 0 2px 6px rgba(0,0,0,0.25); }
+    .hero h1 { font-size: 38px; line-height: 1.2; color: #1A1A1A; max-width: 620px; font-family: 'Rye', cursive; font-weight: 900; }
+    .hero p { color: #3E2A1A; max-width: 520px; line-height: 1.6; font-family: 'Bebas Neue', cursive; font-size: 17px; letter-spacing: 0.08em; }
+    .hero-trust { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 0.25rem; }
+    .hero-trust-item { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--brown); letter-spacing: 0.05em; text-transform: uppercase; }
     .hero-trust-item span:first-child { font-size: 16px; }
-
-    .hero-btns {
-      display: flex; gap: 12px; flex-wrap: wrap;
-      justify-content: center; margin-top: 0.5rem;
-    }
-    .btn-primary {
-      background: var(--brown); color: var(--cream);
-      border: none; padding: 12px 26px; border-radius: 6px;
-      font-size: 15px; cursor: pointer; text-decoration: none; display: inline-block;
-      font-family: 'Lato', sans-serif; font-weight: 700;
-      transition: background 0.2s;
-    }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 0.5rem; }
+    .btn-primary { background: var(--brown); color: var(--cream); border: none; padding: 12px 26px; border-radius: 6px; font-size: 15px; cursor: pointer; text-decoration: none; display: inline-block; font-family: 'Lato', sans-serif; font-weight: 700; transition: background 0.2s; }
     .btn-primary:hover { background: var(--dark-brown); }
-    .btn-secondary {
-      background: transparent; color: var(--brown);
-      border: 2px solid var(--brown); padding: 12px 26px; border-radius: 6px;
-      font-size: 15px; cursor: pointer; text-decoration: none; display: inline-block;
-      font-family: 'Lato', sans-serif; font-weight: 700;
-      transition: background 0.2s;
-    }
+    .btn-secondary { background: transparent; color: var(--brown); border: 2px solid var(--brown); padding: 12px 26px; border-radius: 6px; font-size: 15px; cursor: pointer; text-decoration: none; display: inline-block; font-family: 'Lato', sans-serif; font-weight: 700; transition: background 0.2s; }
     .btn-secondary:hover { background: #EDD8BB; }
 
-    /* ────────────────── PHOTOS BAND ────────────────── */
-    .photos-band {
-      background: #1A1A1A;
-      border-top: 8px solid var(--brown);
-      border-bottom: 8px solid var(--brown);
-      padding: 2rem; display: flex; justify-content: center;
-    }
+    /* ── PHOTOS BAND ── */
+    .photos-band { background: #1A1A1A; border-top: 8px solid var(--brown); border-bottom: 8px solid var(--brown); padding: 2rem; display: flex; justify-content: center; }
     .hero-photos { display: flex; gap: 12px; width: 100%; max-width: 960px; }
-    .hero-photo-wrap {
-      width: 50%; overflow: hidden; border-radius: 10px;
-      position: relative; transition: transform 0.4s ease, box-shadow 0.4s ease;
-      border: 2px solid var(--brown);
-    }
-    .hero-photo-wrap:hover {
-      transform: scale(1.03);
-      box-shadow: 0 12px 36px rgba(44,26,14,0.28); z-index: 1;
-    }
-    .hero-photo-wrap img {
-      width: 100%; height: 360px; object-fit: cover;
-      object-position: center top; display: block; opacity: 0;
-      transform-origin: center center; border-radius: 10px;
-    }
-    .hero-photo-wrap:nth-child(1) img {
-      animation: fadeInPhoto 1.2s ease 0.4s forwards, kenBurnsZoomIn 18s ease-in-out 0.4s infinite alternate;
-    }
-    .hero-photo-wrap:nth-child(2) img {
-      object-position: left top;
-      animation: fadeInPhoto 1.2s ease 0.8s forwards, kenBurnsPan 20s ease-in-out 0.8s infinite alternate;
-    }
+    .hero-photo-wrap { width: 50%; overflow: hidden; border-radius: 10px; position: relative; transition: transform 0.4s ease, box-shadow 0.4s ease; border: 2px solid var(--brown); }
+    .hero-photo-wrap:hover { transform: scale(1.03); box-shadow: 0 12px 36px rgba(44,26,14,0.28); z-index: 1; }
+    .hero-photo-wrap img { width: 100%; height: 360px; object-fit: cover; object-position: center top; display: block; opacity: 0; transform-origin: center center; border-radius: 10px; }
+    .hero-photo-wrap:nth-child(1) img { animation: fadeInPhoto 1.2s ease 0.4s forwards, kenBurnsZoomIn 18s ease-in-out 0.4s infinite alternate; }
+    .hero-photo-wrap:nth-child(2) img { object-position: left top; animation: fadeInPhoto 1.2s ease 0.8s forwards, kenBurnsPan 20s ease-in-out 0.8s infinite alternate; }
     @keyframes fadeInPhoto { to { opacity: 1; } }
     @keyframes kenBurnsZoomIn { 0% { transform: scale(1.0); } 100% { transform: scale(1.12); } }
     @keyframes kenBurnsPan { 0% { transform: scale(1.1) translateX(0%); } 100% { transform: scale(1.1) translateX(-4%); } }
 
-    /* ────────────────── PRODUCTS ────────────────── */
-    .section-wrap-light {
-      max-width: 1000px; margin: 0 auto; padding: 3rem 2rem;
-    }
+    /* ── PRODUCTS ── */
+    .section-wrap-light { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
     .section-divider-light { border: none; border-top: 1px solid var(--border); }
+    h2.light { font-size: 26px; font-weight: 900; margin-bottom: 0.4rem; color: #1A1A1A; font-family: 'Playfair Display', Georgia, serif; }
+    .section-sub.light { font-size: 14px; color: var(--brown); margin-bottom: 1.5rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; }
+    .category-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--brown); margin: 1.75rem 0 0.75rem; font-weight: 700; }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
 
-    h2.light {
-      font-size: 26px; font-weight: 900; margin-bottom: 0.4rem;
-      color: #1A1A1A; font-family: 'Playfair Display', Georgia, serif;
-    }
-    .section-sub.light {
-      font-size: 14px; color: var(--brown); margin-bottom: 1.5rem;
-      letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700;
-    }
-
-    .category-label {
-      font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
-      color: var(--brown); margin: 1.75rem 0 0.75rem; font-weight: 700;
-    }
-
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-      gap: 14px;
-    }
+    /* ── PRODUCT CARD ── */
     .product-card {
-      background: #fff; border: 1px solid var(--border);
-      border-radius: 10px; overflow: hidden;
-      display: flex; flex-direction: column;
-      transition: box-shadow 0.2s, transform 0.2s;
+      background: #fff; border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+      display: flex; flex-direction: column; transition: box-shadow 0.2s, transform 0.2s; position: relative;
     }
-    .product-card:hover {
-      box-shadow: 0 6px 24px rgba(122,78,45,0.15);
-      transform: translateY(-2px);
+    .product-card:hover { box-shadow: 0 6px 24px rgba(122,78,45,0.15); transform: translateY(-2px); }
+
+    /* Fresh / Frozen badge */
+    .freshness-badge {
+      position: absolute; top: 8px; right: 8px;
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: 0.04em; text-align: center; line-height: 1.2;
+      z-index: 2; border: 2px solid rgba(255,255,255,0.8);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      color: #fff;
     }
-    .product-card-img {
-      width: 100%; height: 150px; object-fit: cover; display: block; background: #EDD8BB;
-    }
-    .product-card-body {
-      padding: 1rem 1.1rem 1.1rem;
-      display: flex; flex-direction: column; flex-grow: 1;
-    }
+    .freshness-badge.fresh { background: #2E7D32; }
+    .freshness-badge.frozen { background: #1565C0; }
+
+    .product-card-img { width: 100%; height: 150px; object-fit: cover; display: block; background: #EDD8BB; }
+    .product-card-body { padding: 1rem 1.1rem 1.1rem; display: flex; flex-direction: column; flex-grow: 1; }
     .product-card .name { font-size: 15px; font-weight: 700; color: #1A1A1A; margin-bottom: 4px; font-family: 'Playfair Display', Georgia, serif; }
     .product-card .desc { font-size: 12px; color: var(--brown); flex-grow: 1; margin-bottom: 10px; line-height: 1.5; }
     .product-card .price { font-size: 16px; font-weight: 700; color: var(--brown); }
-
-    .add-btn {
-      width: 100%;
-      background: var(--brown); color: var(--cream);
-      border: none; padding: 9px 0; border-radius: 6px;
-      font-size: 14px; font-weight: 700; cursor: pointer;
-      font-family: 'Lato', sans-serif; margin-top: 10px;
-      transition: background 0.2s;
-    }
+    .add-btn { width: 100%; background: var(--brown); color: var(--cream); border: none; padding: 9px 0; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; margin-top: 10px; transition: background 0.2s; }
     .add-btn:hover { background: var(--dark-brown); }
     .add-btn.added { background: #3A7D44; }
 
-    /* ────────────────── BLACK HALF ────────────────── */
+    /* ── BLACK HALF ── */
     .black-half { background: #1A1A1A; }
     .section-wrap-dark { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
     .section-divider-dark { border: none; border-top: 1px solid #3D3D3D; }
-
     h2.dark { font-size: 26px; font-weight: 900; margin-bottom: 0.4rem; color: var(--cream); font-family: 'Playfair Display', Georgia, serif; }
     .section-sub.dark { font-size: 14px; color: var(--gold); margin-bottom: 1.5rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; }
-
-    .delivery-box {
-      background: #2E2E2E; border-radius: 10px; padding: 2rem;
-      margin-bottom: 2rem; border: 1px solid #3D3D3D;
-    }
+    .delivery-box { background: #2E2E2E; border-radius: 10px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #3D3D3D; }
     .delivery-box h3 { font-size: 18px; margin-bottom: 1rem; color: var(--gold); font-family: 'Playfair Display', Georgia, serif; font-weight: 700; }
     .delivery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
     .delivery-card { background: #1A1A1A; border-radius: 8px; padding: 1rem; border: 1px solid #3D3D3D; }
     .delivery-card .d-title { font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 6px; }
     .delivery-card .d-detail { font-size: 13px; color: var(--muted); line-height: 1.6; }
-
-    /* Call to action checkout box */
-    .checkout-cta-box {
-      background: linear-gradient(135deg, #2E2E2E 0%, #1A1A1A 100%);
-      border: 1px solid var(--brown);
-      border-radius: 10px;
-      padding: 2rem;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
+    .checkout-cta-box { background: linear-gradient(135deg, #2E2E2E 0%, #1A1A1A 100%); border: 1px solid var(--brown); border-radius: 10px; padding: 2rem; text-align: center; margin-bottom: 2rem; }
     .checkout-cta-box p { color: var(--muted); font-size: 14px; margin-bottom: 1rem; line-height: 1.6; }
-    .btn-checkout {
-      display: inline-block;
-      background: var(--brown); color: var(--cream);
-      border: none; padding: 14px 36px; border-radius: 8px;
-      font-size: 16px; font-weight: 700; cursor: pointer;
-      font-family: 'Lato', sans-serif; text-decoration: none;
-      letter-spacing: 0.04em; transition: background 0.2s;
-    }
+    .btn-checkout { display: inline-block; background: var(--brown); color: var(--cream); border: none; padding: 14px 36px; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; text-decoration: none; letter-spacing: 0.04em; transition: background 0.2s; }
     .btn-checkout:hover { background: var(--dark-brown); }
-
-    /* Email order form */
-    .order-form-wrap {
-      background: #2E2E2E; border-radius: 10px; padding: 2rem; border: 1px solid #3D3D3D;
-    }
+    .order-form-wrap { background: #2E2E2E; border-radius: 10px; padding: 2rem; border: 1px solid #3D3D3D; }
     .order-form-wrap p { font-size: 14px; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.7; }
     .order-form { display: flex; flex-direction: column; gap: 10px; }
-    .order-form input, .order-form select, .order-form textarea {
-      padding: 10px 14px; border-radius: 7px;
-      border: 1px solid #3D3D3D; font-size: 14px;
-      background: #1A1A1A; color: var(--cream);
-      font-family: 'Lato', Arial, sans-serif;
-    }
+    .order-form input, .order-form select, .order-form textarea { padding: 10px 14px; border-radius: 7px; border: 1px solid #3D3D3D; font-size: 14px; background: #1A1A1A; color: var(--cream); font-family: 'Lato', Arial, sans-serif; }
     .order-form textarea { resize: vertical; min-height: 90px; }
-    .order-form input:focus, .order-form select:focus, .order-form textarea:focus {
-      outline: none; border-color: var(--gold);
-    }
+    .order-form input:focus, .order-form select:focus, .order-form textarea:focus { outline: none; border-color: var(--gold); }
     .order-form input::placeholder, .order-form textarea::placeholder { color: #888; }
-
-    /* About */
     .about-text { font-size: 15px; color: var(--muted); line-height: 1.8; max-width: 720px; }
     .about-text p + p { margin-top: 1rem; }
     .badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 1.25rem; }
-    .badge {
-      font-size: 12px; padding: 5px 14px; border-radius: 20px;
-      background: #2E2E2E; color: var(--gold); font-weight: 700;
-      border: 1px solid #3D3D3D;
-    }
-
-    /* Contact */
+    .badge { font-size: 12px; padding: 5px 14px; border-radius: 20px; background: #2E2E2E; color: var(--gold); font-weight: 700; border: 1px solid #3D3D3D; }
     .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
     .contact-card { background: #2E2E2E; border-radius: 10px; padding: 1.1rem; border: 1px solid #3D3D3D; }
     .contact-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 6px; font-weight: 700; }
     .contact-card .value { font-size: 14px; font-weight: 700; color: var(--cream); line-height: 1.5; }
-
-    /* Footer */
-    footer {
-      text-align: center; padding: 2rem;
-      font-size: 13px; color: var(--muted);
-      background: #1A1A1A;
-      border-top: 3px solid var(--brown);
-    }
+    footer { text-align: center; padding: 2rem; font-size: 13px; color: var(--muted); background: #1A1A1A; border-top: 3px solid var(--brown); }
     footer img { height: 48px; width: auto; filter: brightness(0) invert(1); display: block; margin: 0 auto 0.75rem; opacity: 0.5; }
+    #popup { position: fixed; bottom: 24px; right: 24px; background: var(--black); color: var(--cream); padding: 12px 18px; border-radius: 8px; opacity: 0; transform: translateY(20px); transition: all 0.3s ease; z-index: 500; font-size: 14px; border-left: 3px solid var(--brown); pointer-events: none; }
 
-    /* ────────────────── TOAST POPUP ────────────────── */
-    #popup {
-      position: fixed; bottom: 24px; right: 24px;
-      background: var(--black); color: var(--cream);
-      padding: 12px 18px; border-radius: 8px;
-      opacity: 0; transform: translateY(20px);
-      transition: all 0.3s ease; z-index: 500;
-      font-size: 14px; border-left: 3px solid var(--brown);
-      pointer-events: none;
-    }
-
-    /* ────────────────── MOBILE ────────────────── */
+    /* ── MOBILE ── */
     @media (max-width: 600px) {
-      /* Nav — stack logo on top, links below, fully centred */
-      nav {
-        flex-direction: column;
-        align-items: center;
-        padding: 0.75rem 1rem;
-        gap: 0.6rem;
-        text-align: center;
-      }
-      .nav-links {
-        gap: 0.6rem;
-        flex-wrap: wrap;
-        justify-content: center;
-        width: 100%;
-      }
+      nav { flex-direction: column; align-items: center; padding: 0.75rem 1rem; gap: 0.6rem; text-align: center; }
+      .nav-links { gap: 0.6rem; flex-wrap: wrap; justify-content: center; width: 100%; }
       .nav-links a { font-size: 12px; }
       #cart-nav-btn { font-size: 13px; padding: 7px 14px; }
-      #cart-nav-btn span.cart-label { display: inline; }
-
-      /* Hero — centred, better spacing */
-      .hero {
-        padding: 2rem 1.25rem 1.75rem;
-        gap: 0.6rem;
-        align-items: center;
-        text-align: center;
-        width: 100%;
-      }
+      .hero { padding: 2rem 1.25rem 1.75rem; gap: 0.6rem; align-items: center; text-align: center; width: 100%; }
       .hero img.hero-logo { height: 150px; }
       .hero h1 { font-size: 24px; max-width: 100%; }
       .hero p { font-size: 14px; max-width: 100%; }
-      .hero-trust {
-        gap: 10px;
-        justify-content: center;
-        width: 100%;
-      }
+      .hero-trust { gap: 10px; justify-content: center; width: 100%; }
       .hero-trust-item { font-size: 11px; }
       .hero-btns { width: 100%; justify-content: center; }
       .hero-btns a { flex: 1; text-align: center; }
-
-      /* Photos */
       .photos-band { padding: 1rem; }
       .hero-photos { flex-direction: column; gap: 8px; }
       .hero-photo-wrap { width: 100%; }
       .hero-photo-wrap img { height: 200px; }
-
-      /* Sections */
       .section-wrap-light { padding: 1.75rem 1.25rem; }
       .section-wrap-dark { padding: 1.75rem 1.25rem; }
-
-      /* Products grid — 2 columns on mobile */
       .products-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .product-card-img { height: 120px; }
-      .product-card-body { padding: 0.75rem; }
-      .product-card .name { font-size: 13px; }
-      .product-card .desc { font-size: 11px; }
-      .product-card .price { font-size: 14px; }
-      .add-btn { font-size: 12px; padding: 8px 0; }
-
-      /* Delivery grid */
+      .product-card-img { height: 110px; }
+      .product-card-body { padding: 0.65rem; }
+      .product-card .name { font-size: 12px; }
+      .product-card .desc { font-size: 10px; }
+      .product-card .price { font-size: 13px; }
+      .add-btn { font-size: 11px; padding: 7px 0; }
+      .freshness-badge { width: 38px; height: 38px; font-size: 7.5px; top: 6px; right: 6px; }
       .delivery-grid { grid-template-columns: 1fr; }
-
-      /* Cart drawer full width */
       #cart-drawer { width: 100vw; }
-
-      /* Contact grid */
       .contact-grid { grid-template-columns: 1fr 1fr; }
     }
-
     @media (max-width: 360px) {
       .products-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
       .hero h1 { font-size: 21px; }
@@ -573,18 +245,13 @@
 
   <!-- NAV -->
   <nav>
-    <div class="nav-logo">
-      <img src="GMACs_Fresh_Meat_logo_2024.png" alt="Gmac's Fresh Meat" />
-    </div>
+    <div class="nav-logo"><img src="GMACs_Fresh_Meat_logo_2024.png" alt="Gmac's Fresh Meat" /></div>
     <div class="nav-links">
       <a href="#products">PRODUCTS</a>
       <a href="#order">ORDER</a>
       <a href="#about">ABOUT</a>
       <a href="#contact">CONTACT</a>
-      <button id="cart-nav-btn" onclick="openCart()">
-        🛒 <span class="cart-label">Cart</span>
-        <span id="cart-nav-badge"></span>
-      </button>
+      <button id="cart-nav-btn" onclick="openCart()">🛒 <span class="cart-label">Cart</span><span id="cart-nav-badge"></span></button>
     </div>
   </nav>
 
@@ -602,17 +269,9 @@
       </div>
     </div>
     <div class="drawer-footer" id="drawer-footer" style="display:none;">
-      <div class="drawer-subtotal">
-        <span>Subtotal</span>
-        <span id="drawer-subtotal-val">$0</span>
-      </div>
-      <div class="drawer-subtotal" style="font-size:12px;color:#444;">
-        <span>Delivery fee calculated at checkout</span>
-      </div>
-      <div class="drawer-total">
-        <span>Subtotal</span>
-        <span id="drawer-total-val">$0</span>
-      </div>
+      <div class="drawer-subtotal"><span>Subtotal</span><span id="drawer-subtotal-val">$0</span></div>
+      <div class="drawer-subtotal" style="font-size:12px;color:#444;"><span>Delivery fee calculated at checkout</span></div>
+      <div class="drawer-total"><span>Subtotal</span><span id="drawer-total-val">$0</span></div>
       <a href="checkout.html" id="checkout-btn">Proceed to Checkout →</a>
       <p class="drawer-note">🔒 Secure checkout via Stripe</p>
     </div>
@@ -627,22 +286,23 @@
     <div class="hero-tag">Est. 2023 &nbsp;·&nbsp; Muskoka, Ontario</div>
     <h1>Grass-fed. Non-GMO. Ontario Raised.</h1>
     <p>Brought to farmers markets across Muskoka and right to your door.</p>
-
+    <div class="hero-trust">
+      <div class="hero-trust-item"><span>🌿</span><span>Grass-fed &amp; Finished</span></div>
+      <div class="hero-trust-item"><span>🚫</span><span>Non-GMO</span></div>
+      <div class="hero-trust-item"><span>🍁</span><span>Ontario Raised</span></div>
+      <div class="hero-trust-item"><span>🚚</span><span>Delivery Available</span></div>
+    </div>
     <div class="hero-btns">
       <a href="#products" class="btn-primary">Shop Now</a>
       <a href="#about" class="btn-secondary">Our Story</a>
     </div>
   </div>
 
-  <!-- MARKET PHOTOS BAND -->
+  <!-- PHOTOS BAND -->
   <div class="photos-band">
     <div class="hero-photos">
-      <div class="hero-photo-wrap">
-        <img src="IMG_7739.jpeg" alt="Gmac's Fresh Meat at the farmers market" />
-      </div>
-      <div class="hero-photo-wrap">
-        <img src="IMG_7470.jpeg" alt="Gmac's Fresh Meat selling at the market" />
-      </div>
+      <div class="hero-photo-wrap"><img src="IMG_7739.jpeg" alt="Gmac's Fresh Meat at the farmers market" /></div>
+      <div class="hero-photo-wrap"><img src="IMG_7470.jpeg" alt="Gmac's Fresh Meat selling at the market" /></div>
     </div>
   </div>
 
@@ -652,142 +312,286 @@
     <h2 class="light">OUR PRODUCTS</h2>
     <p class="section-sub light">Grass-fed beef · Non-GMO chicken · Ontario pork · Ontario Lamb</p>
 
+    <!-- BEEF -->
     <div class="category-label">🐄 BEEF</div>
     <div class="products-grid">
+
       <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
         <img src="striploin.jpeg" class="product-card-img" alt="New York Striploin" />
         <div class="product-card-body">
           <div class="name">New York Striploin</div>
-          <div class="desc">12oz · Grass-fed &amp; finished Ontario beef</div>
+          <div class="desc">12oz · Grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
           <div class="price">$30</div>
           <button class="add-btn" onclick="addToCart('New York Striploin', 30, this)">Add to Order</button>
         </div>
       </div>
+
       <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
         <img src="ribeye.jpg" class="product-card-img" alt="Ribeye Steak" />
         <div class="product-card-body">
           <div class="name">Ribeye Steak</div>
-          <div class="desc">12oz · Grass-fed &amp; finished Ontario beef</div>
+          <div class="desc">12oz · Grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
           <div class="price">$30</div>
           <button class="add-btn" onclick="addToCart('Ribeye Steak', 30, this)">Add to Order</button>
         </div>
       </div>
+
       <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
         <img src="tomahawk.jpg" class="product-card-img" alt="Tomahawk Steak" />
         <div class="product-card-body">
           <div class="name">Tomahawk Steak</div>
-          <div class="desc">Ontario grass-fed — the showstopper cut</div>
+          <div class="desc">Ontario grass-fed — the showstopper cut · Vacuum sealed</div>
           <div class="price">$75</div>
           <button class="add-btn" onclick="addToCart('Tomahawk Steak', 75, this)">Add to Order</button>
         </div>
       </div>
+
       <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
+        <img src="porterhouse.jpg" class="product-card-img" alt="Porterhouse Steak" />
+        <div class="product-card-body">
+          <div class="name">Porterhouse Steak</div>
+          <div class="desc">16oz · Grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
+          <div class="price">$40</div>
+          <button class="add-btn" onclick="addToCart('Porterhouse Steak', 40, this)">Add to Order</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
+        <img src="top_sirloin.webp" class="product-card-img" alt="Top Sirloin Steak" />
+        <div class="product-card-body">
+          <div class="name">Top Sirloin Steak</div>
+          <div class="desc">8oz · Grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
+          <div class="price">$20</div>
+          <button class="add-btn" onclick="addToCart('Top Sirloin Steak', 20, this)">Add to Order</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
+        <img src="groundbeef.webp" class="product-card-img" alt="Grass Fed Ground Beef" />
+        <div class="product-card-body">
+          <div class="name">Grass Fed Ground Beef</div>
+          <div class="desc">Made from AAA grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
+          <div class="price">1lb $20 · 2lb $35</div>
+          <button class="add-btn" onclick="addToCart('Grass Fed Ground Beef (1lb)', 20, this)">Add to Order</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
+        <img src="cowboy_ribeye.jpg" class="product-card-img" alt="Gmac's Signature Cowboy Ribeye" />
+        <div class="product-card-body">
+          <div class="name">Gmac's Signature Cowboy Ribeye</div>
+          <div class="desc">AAA 12oz grass-fed &amp; finished ribeye — our signature cut · Vacuum sealed</div>
+          <div class="price">$50</div>
+          <button class="add-btn" onclick="addToCart('Gmac\'s Signature Cowboy Ribeye', 50, this)">Add to Order</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
         <img src="primeribburger.jpeg" class="product-card-img" alt="Prime Rib Burgers" />
         <div class="product-card-body">
           <div class="name">Prime Rib Burgers</div>
-          <div class="desc">4-pack · Rich, beefy flavour</div>
+          <div class="desc">4-pack · Rich, beefy Ontario flavour · Vacuum sealed</div>
           <div class="price">$20</div>
           <button class="add-btn" onclick="addToCart('Prime Rib Burgers', 20, this)">Add to Order</button>
         </div>
       </div>
+
       <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
         <img src="chuck and brisket burger.jpg" class="product-card-img" alt="Wagyu Burgers" />
         <div class="product-card-body">
           <div class="name">Wagyu Burgers</div>
-          <div class="desc">2-pack · Premium marbled wagyu beef</div>
+          <div class="desc">2-pack · Premium marbled wagyu beef · Vacuum sealed</div>
           <div class="price">$20</div>
           <button class="add-btn" onclick="addToCart('Wagyu Burgers', 20, this)">Add to Order</button>
         </div>
       </div>
+
       <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
         <img src="waygu burger.jpg" class="product-card-img" alt="Chuck & Brisket Burgers" />
         <div class="product-card-body">
           <div class="name">Chuck &amp; Brisket Burgers</div>
-          <div class="desc">4-pack · Slow-cooked flavour profile</div>
+          <div class="desc">4-pack · Slow-cooked flavour profile · Vacuum sealed</div>
           <div class="price">$20</div>
           <button class="add-btn" onclick="addToCart('Chuck & Brisket Burgers', 20, this)">Add to Order</button>
         </div>
       </div>
+
     </div>
 
-    <div class="category-label">🐔 CHICKEN</div>
+    <!-- POULTRY -->
+    <div class="category-label">🐔 POULTRY</div>
     <div class="products-grid">
+
       <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
+        <img src="whole_chicken.jpg" class="product-card-img" alt="Organic Whole Chicken" />
+        <div class="product-card-body">
+          <div class="name">Organic Whole Chicken</div>
+          <div class="desc">2.5lb · Organic Ontario raised chicken · Fresh</div>
+          <div class="price">$20</div>
+          <button class="add-btn" onclick="addToCart('Organic Whole Chicken', 20, this)">Add to Order</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
+        <img src="drumsticks.webp" class="product-card-img" alt="Organic Chicken Drumsticks" />
+        <div class="product-card-body">
+          <div class="name">Organic Chicken Drumsticks</div>
+          <div class="desc">1lb pack · 4 large organic Ontario drumsticks · Non-GMO</div>
+          <div class="price">$20</div>
+          <button class="add-btn" onclick="addToCart('Organic Chicken Drumsticks', 20, this)">Add to Order</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
+        <img src="chicken_burgers.webp" class="product-card-img" alt="Handmade Organic Chicken Burgers" />
+        <div class="product-card-body">
+          <div class="name">Handmade Organic Chicken Burgers</div>
+          <div class="desc">4 × 4oz handmade patties · Ontario farmed organic chicken · Vacuum sealed</div>
+          <div class="price">$15</div>
+          <button class="add-btn" onclick="addToCart('Handmade Organic Chicken Burgers', 15, this)">Add to Order</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
         <img src="chicken wings.jpg" class="product-card-img" alt="Chicken Wings" />
         <div class="product-card-body">
           <div class="name">Split Tip Chicken Wings</div>
-          <div class="desc">1lb · Non-GMO, Ontario raised</div>
+          <div class="desc">1lb · Non-GMO Ontario raised · Vacuum sealed</div>
           <div class="price">$20</div>
           <button class="add-btn" onclick="addToCart('Split Tip Chicken Wings', 20, this)">Add to Order</button>
         </div>
       </div>
+
       <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
         <img src="chicken breast.jpg" class="product-card-img" alt="Organic Chicken Breast" />
         <div class="product-card-body">
           <div class="name">Organic Chicken Breast</div>
-          <div class="desc">2-pack · Non-GMO organic Ontario chicken</div>
+          <div class="desc">2-pack · Non-GMO organic Ontario chicken · Vacuum sealed</div>
           <div class="price">$20</div>
           <button class="add-btn" onclick="addToCart('Organic Chicken Breast', 20, this)">Add to Order</button>
         </div>
       </div>
+
     </div>
 
+    <!-- PORK -->
     <div class="category-label">🐷 PORK</div>
     <div class="products-grid">
+
       <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
         <img src="pork ribs.jpg" class="product-card-img" alt="Pork Back Ribs" />
         <div class="product-card-body">
           <div class="name">Pork Back Ribs</div>
-          <div class="desc">Full rack · Ontario pork</div>
+          <div class="desc">Full rack · Ontario pork · Vacuum sealed</div>
           <div class="price">$30</div>
           <button class="add-btn" onclick="addToCart('Pork Back Ribs', 30, this)">Add to Order</button>
         </div>
       </div>
+
       <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
         <img src="bacon.jpg" class="product-card-img" alt="Thick Cut Bacon" />
         <div class="product-card-body">
           <div class="name">Smoked Thick Cut Breakfast Bacon</div>
-          <div class="desc">Thick-cut, smoky, and rich</div>
+          <div class="desc">Thick-cut, smoky and rich Ontario pork bacon · Vacuum sealed</div>
           <div class="price">$20</div>
-          <button class="add-btn" onclick="addToCart('Thick Cut Breakfast Bacon', 20, this)">Add to Order</button>
+          <button class="add-btn" onclick="addToCart('Smoked Thick Cut Breakfast Bacon', 20, this)">Add to Order</button>
         </div>
       </div>
+
       <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
+        <img src="dry_cured_bacon.jpg" class="product-card-img" alt="Double Smoked Dry Cured Bacon" />
+        <div class="product-card-body">
+          <div class="name">Double Smoked &amp; Dry Cured Bacon</div>
+          <div class="desc">16 pieces · Double smoked &amp; dry cured with salt &amp; seasoning — bold, intense smoky flavour · Vacuum sealed</div>
+          <div class="price">$20</div>
+          <button class="add-btn" onclick="addToCart('Double Smoked & Dry Cured Bacon', 20, this)">Add to Order</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
+        <img src="pemale.webp" class="product-card-img" alt="Peameal Bacon" />
+        <div class="product-card-body">
+          <div class="name">Peameal Bacon</div>
+          <div class="desc">4-pack · Ontario pork peameal bacon · A Canadian classic</div>
+          <div class="price">$5</div>
+          <button class="add-btn" onclick="addToCart('Peameal Bacon', 5, this)">Add to Order</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <span class="freshness-badge frozen">FROZEN</span>
         <img src="honey garlic.jpg" class="product-card-img" alt="Honey Garlic Sausage" />
         <div class="product-card-body">
           <div class="name">Honey Garlic Sausage</div>
-          <div class="desc">4-pack · Sweet and savoury</div>
+          <div class="desc">4-pack · Sweet and savoury Ontario pork · Vacuum sealed</div>
           <div class="price">$15</div>
           <button class="add-btn" onclick="addToCart('Honey Garlic Sausage', 15, this)">Add to Order</button>
         </div>
       </div>
+
       <div class="product-card">
+        <span class="freshness-badge frozen">FROZEN</span>
         <img src="chorizo.jpg" class="product-card-img" alt="Chorizo Sausage" />
         <div class="product-card-body">
           <div class="name">Chorizo Sausage</div>
-          <div class="desc">4-pack · Bold and smoky</div>
+          <div class="desc">4-pack · Bold and smoky Ontario pork · Vacuum sealed</div>
           <div class="price">$15</div>
           <button class="add-btn" onclick="addToCart('Chorizo Sausage', 15, this)">Add to Order</button>
         </div>
       </div>
+
       <div class="product-card">
+        <span class="freshness-badge frozen">FROZEN</span>
         <img src="spicy italian.jpg" class="product-card-img" alt="Spicy Italian Sausage" />
         <div class="product-card-body">
           <div class="name">Spicy Italian Sausage</div>
-          <div class="desc">4-pack · Classic Italian heat</div>
+          <div class="desc">4-pack · Classic Italian heat · Ontario pork · Vacuum sealed</div>
           <div class="price">$15</div>
           <button class="add-btn" onclick="addToCart('Spicy Italian Sausage', 15, this)">Add to Order</button>
         </div>
       </div>
+
+      <div class="product-card">
+        <span class="freshness-badge frozen">FROZEN</span>
+        <img src="breakfast_sausage.webp" class="product-card-img" alt="Pork Breakfast Sausage" />
+        <div class="product-card-body">
+          <div class="name">Pork Breakfast Sausage</div>
+          <div class="desc">8-pack · Savoury Ontario pork sausages — perfect for any morning · Contains wheat · Vacuum sealed</div>
+          <div class="price">$10</div>
+          <button class="add-btn" onclick="addToCart('Pork Breakfast Sausage', 10, this)">Add to Order</button>
+        </div>
+      </div>
+
     </div>
 
+    <!-- LAMB -->
     <div class="category-label">🐑 LAMB</div>
     <div class="products-grid">
       <div class="product-card">
+        <span class="freshness-badge fresh">FRESH</span>
         <img src="lamb loin chop.jpg" class="product-card-img" alt="Lamb Loin Chops" />
         <div class="product-card-body">
           <div class="name">Lamb Loin Chops</div>
-          <div class="desc">4-pack · Ontario lamb</div>
+          <div class="desc">4-pack · Ontario lamb · Vacuum sealed</div>
           <div class="price">$40</div>
           <button class="add-btn" onclick="addToCart('Lamb Loin Chops', 40, this)">Add to Order</button>
         </div>
@@ -797,38 +601,22 @@
 
   <!-- BLACK HALF -->
   <div class="black-half">
-
-    <!-- ORDER -->
     <div class="section-wrap-dark" id="order">
       <h2 class="dark">Order for Delivery</h2>
       <p class="section-sub dark">48-hour notice required on all orders</p>
-
       <div class="delivery-box">
         <h3>Delivery Info</h3>
         <div class="delivery-grid">
-          <div class="delivery-card">
-            <div class="d-title">Standard Delivery</div>
-            <div class="d-detail">$20 delivery fee within 100km of Orillia, ON</div>
-          </div>
-          <div class="delivery-card">
-            <div class="d-title">Extended Delivery</div>
-            <div class="d-detail">$40 delivery fee outside 100km of Orillia, ON</div>
-          </div>
-          <div class="delivery-card">
-            <div class="d-title">Market Pickup</div>
-            <div class="d-detail">Find us at farmers markets throughout Ontario — no delivery fee</div>
-          </div>
+          <div class="delivery-card"><div class="d-title">Standard Delivery</div><div class="d-detail">$20 delivery fee within 100km of Orillia, ON</div></div>
+          <div class="delivery-card"><div class="d-title">Extended Delivery</div><div class="d-detail">$40 delivery fee outside 100km of Orillia, ON</div></div>
+          <div class="delivery-card"><div class="d-title">Market Pickup</div><div class="d-detail">Find us at farmers markets throughout Ontario — no delivery fee</div></div>
         </div>
       </div>
-
-      <!-- Stripe checkout CTA -->
       <div class="checkout-cta-box">
         <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:20px;color:var(--cream);margin-bottom:0.5rem;">Ready to Order?</h3>
         <p>Add items to your cart and pay securely with credit card, debit, or Apple Pay.<br>We'll confirm your delivery details within 48 hours.</p>
-        <a href="checkout.html" class="btn-checkout" id="cta-checkout-btn">🛒 Go to Checkout</a>
+        <a href="checkout.html" class="btn-checkout">🛒 Go to Checkout</a>
       </div>
-
-      <!-- Fallback email order -->
       <div class="order-form-wrap">
         <p>Prefer to order by email? Fill out the form below and we'll get back to you to confirm your order and arrange delivery or pickup.</p>
         <form class="order-form" onsubmit="sendOrder(event)">
@@ -849,7 +637,6 @@
 
     <hr class="section-divider-dark" />
 
-    <!-- ABOUT -->
     <div class="section-wrap-dark" id="about">
       <h2 class="dark">About Us</h2>
       <p class="section-sub dark">Est. 2023 · Muskoka, Ontario</p>
@@ -867,108 +654,57 @@
 
     <hr class="section-divider-dark" />
 
-    <!-- CONTACT -->
     <div class="section-wrap-dark" id="contact">
       <h2 class="dark">Get In Touch</h2>
       <p class="section-sub dark">We'd love to hear from you</p>
       <div class="contact-grid">
-        <div class="contact-card">
-          <div class="label">Email</div>
-          <div class="value">gmacswholesale@gmail.com</div>
-        </div>
-        <div class="contact-card">
-          <div class="label">Phone</div>
-          <div class="value">705-955-1667</div>
-        </div>
-        <div class="contact-card">
-          <div class="label">Delivery Area</div>
-          <div class="value">Within 100km of Orillia, ON</div>
-        </div>
-        <div class="contact-card">
-          <div class="label">Order Notice</div>
-          <div class="value">48 hours required on all orders</div>
-        </div>
+        <div class="contact-card"><div class="label">Email</div><div class="value">gmacswholesale@gmail.com</div></div>
+        <div class="contact-card"><div class="label">Phone</div><div class="value">705-955-1667</div></div>
+        <div class="contact-card"><div class="label">Delivery Area</div><div class="value">Within 100km of Orillia, ON</div></div>
+        <div class="contact-card"><div class="label">Order Notice</div><div class="value">48 hours required on all orders</div></div>
       </div>
     </div>
+  </div>
 
-  </div><!-- end black-half -->
-
-  <!-- FOOTER -->
   <footer>
     <img src="GMACs_Fresh_Meat_logo_2024.png" alt="Gmac's Fresh Meat" />
     © 2026 Gmac's Fresh Meat · Muskoka, Ontario · Est. 2023
   </footer>
 
-  <!-- TOAST -->
   <div id="popup"></div>
 
   <script>
-    // ─── CART STATE ───
     let cart = JSON.parse(localStorage.getItem("gmacs_cart") || "[]");
+    function saveCart() { localStorage.setItem("gmacs_cart", JSON.stringify(cart)); }
 
-    function saveCart() {
-      localStorage.setItem("gmacs_cart", JSON.stringify(cart));
-    }
-
-    // ─── ADD TO CART ───
     function addToCart(name, price, btn) {
       const existing = cart.find(i => i.name === name);
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({ name, price, qty: 1 });
-      }
-      saveCart();
-      renderDrawer();
-      updateNavBadge();
-      showToast(`${name} added to cart`);
-      openCart();
-
+      if (existing) { existing.qty += 1; } else { cart.push({ name, price, qty: 1 }); }
+      saveCart(); renderDrawer(); updateNavBadge(); showToast(`${name} added to cart`); openCart();
       if (btn) {
-        btn.textContent = "Added ✓";
-        btn.classList.add("added");
-        setTimeout(() => {
-          btn.textContent = "Add to Order";
-          btn.classList.remove("added");
-        }, 1200);
+        btn.textContent = "Added ✓"; btn.classList.add("added");
+        setTimeout(() => { btn.textContent = "Add to Order"; btn.classList.remove("added"); }, 1200);
       }
     }
 
-    // ─── QTY CONTROLS ───
     function changeQty(name, delta) {
       const item = cart.find(i => i.name === name);
       if (!item) return;
       item.qty += delta;
-      if (item.qty <= 0) {
-        cart = cart.filter(i => i.name !== name);
-      }
-      saveCart();
-      renderDrawer();
-      updateNavBadge();
+      if (item.qty <= 0) { cart = cart.filter(i => i.name !== name); }
+      saveCart(); renderDrawer(); updateNavBadge();
     }
 
-    // ─── RENDER DRAWER ───
     function renderDrawer() {
       const itemsEl = document.getElementById("drawer-items");
       const footerEl = document.getElementById("drawer-footer");
       const emptyEl = document.getElementById("drawer-empty");
-
       if (cart.length === 0) {
-        emptyEl.style.display = "block";
-        footerEl.style.display = "none";
-        // Clear any item rows
-        const rows = itemsEl.querySelectorAll(".drawer-item");
-        rows.forEach(r => r.remove());
-        return;
+        emptyEl.style.display = "block"; footerEl.style.display = "none";
+        itemsEl.querySelectorAll(".drawer-item").forEach(r => r.remove()); return;
       }
-
-      emptyEl.style.display = "none";
-      footerEl.style.display = "block";
-
-      // Rebuild items
-      const rows = itemsEl.querySelectorAll(".drawer-item");
-      rows.forEach(r => r.remove());
-
+      emptyEl.style.display = "none"; footerEl.style.display = "block";
+      itemsEl.querySelectorAll(".drawer-item").forEach(r => r.remove());
       cart.forEach(item => {
         const div = document.createElement("div");
         div.className = "drawer-item";
@@ -981,78 +717,48 @@
             <button class="qty-btn" onclick="changeQty('${item.name.replace(/'/g,"\\'")}', -1)">−</button>
             <span class="qty-num">${item.qty}</span>
             <button class="qty-btn" onclick="changeQty('${item.name.replace(/'/g,"\\'")}', 1)">+</button>
-          </div>
-        `;
+          </div>`;
         itemsEl.insertBefore(div, emptyEl);
       });
-
       const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
       document.getElementById("drawer-subtotal-val").textContent = `$${subtotal.toFixed(2)}`;
       document.getElementById("drawer-total-val").textContent = `$${subtotal.toFixed(2)}`;
     }
 
-    // ─── NAV BADGE ───
     function updateNavBadge() {
       const badge = document.getElementById("cart-nav-badge");
       const total = cart.reduce((s, i) => s + i.qty, 0);
-      if (total > 0) {
-        badge.textContent = total;
-        badge.classList.add("visible");
-      } else {
-        badge.classList.remove("visible");
-      }
+      if (total > 0) { badge.textContent = total; badge.classList.add("visible"); }
+      else { badge.classList.remove("visible"); }
     }
 
-    // ─── DRAWER OPEN/CLOSE ───
-    function openCart() {
-      document.getElementById("cart-overlay").classList.add("open");
-      document.getElementById("cart-drawer").classList.add("open");
-      document.body.style.overflow = "hidden";
-    }
-    function closeCart() {
-      document.getElementById("cart-overlay").classList.remove("open");
-      document.getElementById("cart-drawer").classList.remove("open");
-      document.body.style.overflow = "";
-    }
+    function openCart() { document.getElementById("cart-overlay").classList.add("open"); document.getElementById("cart-drawer").classList.add("open"); document.body.style.overflow = "hidden"; }
+    function closeCart() { document.getElementById("cart-overlay").classList.remove("open"); document.getElementById("cart-drawer").classList.remove("open"); document.body.style.overflow = ""; }
 
-    // ─── TOAST ───
     function showToast(msg) {
       const popup = document.getElementById("popup");
-      popup.textContent = msg;
-      popup.style.opacity = "1";
-      popup.style.transform = "translateY(0)";
+      popup.textContent = msg; popup.style.opacity = "1"; popup.style.transform = "translateY(0)";
       clearTimeout(popup._timer);
-      popup._timer = setTimeout(() => {
-        popup.style.opacity = "0";
-        popup.style.transform = "translateY(20px)";
-      }, 1800);
+      popup._timer = setTimeout(() => { popup.style.opacity = "0"; popup.style.transform = "translateY(20px)"; }, 1800);
     }
 
-    // ─── EMAIL FALLBACK ORDER ───
     function sendOrder(e) {
       e.preventDefault();
-      const name    = document.getElementById("name").value;
-      const phone   = document.getElementById("phone").value;
-      const email   = document.getElementById("email").value;
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const email = document.getElementById("email").value;
       const address = document.getElementById("address").value;
-      const method  = document.getElementById("method").value;
-      const notes   = document.getElementById("order-notes").value;
-
-      const cartSummary = cart.length > 0
-        ? cart.map(i => `${i.name} x${i.qty}`).join("\n")
-        : notes;
-
+      const method = document.getElementById("method").value;
+      const notes = document.getElementById("order-notes").value;
+      const cartSummary = cart.length > 0 ? cart.map(i => `${i.name} x${i.qty}`).join("\n") : notes;
       const body = `NEW ORDER REQUEST\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nMethod: ${method}\nAddress: ${address}\n\nOrder Details:\n${cartSummary}\n\n------------------------\nSent from website`;
-
       window.location.href = `mailto:gmacswholesale@gmail.com?subject=${encodeURIComponent("New Order - Gmac's Fresh Meat")}&body=${encodeURIComponent(body)}`;
     }
 
-    // ─── INIT ───
     renderDrawer();
     updateNavBadge();
   </script>
 
-  <!-- HERO ANIMATION -->
   <script>
   (function() {
     const SLAM_DELAY = 0.52;
