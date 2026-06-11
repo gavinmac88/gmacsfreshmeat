@@ -372,6 +372,27 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── ADDRESS GRID ── */
+    .address-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .address-grid .full { grid-column: 1 / -1; }
+    input[readonly] {
+      background: #F0E8DC;
+      color: var(--muted);
+      cursor: default;
+    }
+    .field-error {
+      display: block;
+      font-size: 11px;
+      color: #c0392b;
+      margin-top: 3px;
+      min-height: 14px;
+    }
+    input.invalid { border-color: #c0392b !important; }
+
     /* ── NOTICE BOX ── */
     .notice-box {
       background: #FFF5EA;
@@ -480,8 +501,27 @@
           </div>
 
           <div id="address-wrap" style="margin-top:1rem;">
-            <label for="address">Delivery Address</label>
-            <input type="text" id="address" placeholder="123 Main St, Barrie, ON" />
+            <div class="address-grid">
+              <div class="full">
+                <label for="address">Street Address</label>
+                <input type="text" id="address" placeholder="123 Main St" autocomplete="address-line1" />
+                <span class="field-error" id="address-error"></span>
+              </div>
+              <div>
+                <label for="city">City</label>
+                <input type="text" id="city" placeholder="Barrie" autocomplete="address-level2" />
+                <span class="field-error" id="city-error"></span>
+              </div>
+              <div>
+                <label for="postal-code">Postal Code</label>
+                <input type="text" id="postal-code" placeholder="L4M 1A1" maxlength="7" autocomplete="postal-code" />
+                <span class="field-error" id="postal-code-error"></span>
+              </div>
+              <div class="full">
+                <label for="province">Province</label>
+                <input type="text" id="province" value="Ontario" readonly />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -710,6 +750,27 @@
     }
 
     // ─────────────────────────────────────────────
+    // ADDRESS FIELD VALIDATION HELPERS
+    // ─────────────────────────────────────────────
+    function setFieldError(id, msg) {
+      const input = document.getElementById(id);
+      const err = document.getElementById(id + "-error");
+      if (input) input.classList.add("invalid");
+      if (err) err.textContent = msg;
+    }
+
+    function clearFieldError(id) {
+      const input = document.getElementById(id);
+      const err = document.getElementById(id + "-error");
+      if (input) input.classList.remove("invalid");
+      if (err) err.textContent = "";
+    }
+
+    function isValidPostalCode(pc) {
+      return /^[A-Za-z]\d[A-Za-z]\s?\d[A-Za-z]\d$/.test(pc.trim());
+    }
+
+    // ─────────────────────────────────────────────
     // SUBMIT PAYMENT
     // ─────────────────────────────────────────────
     document.getElementById("pay-btn").addEventListener("click", async () => {
@@ -727,9 +788,23 @@
       }
 
       if (deliveryMethod !== "pickup") {
-        const address = document.getElementById("address").value.trim();
-        if (!address) {
-          showMessage("Please enter your delivery address.");
+        let addressValid = true;
+        const address    = document.getElementById("address").value.trim();
+        const city       = document.getElementById("city").value.trim();
+        const postalCode = document.getElementById("postal-code").value.trim();
+
+        if (!address) { setFieldError("address", "Street address is required"); addressValid = false; }
+        if (!city)    { setFieldError("city",    "City is required");           addressValid = false; }
+        if (!postalCode) {
+          setFieldError("postal-code", "Postal code is required");
+          addressValid = false;
+        } else if (!isValidPostalCode(postalCode)) {
+          setFieldError("postal-code", "Enter a valid Canadian postal code (e.g. L4M 1A1)");
+          addressValid = false;
+        }
+
+        if (!addressValid) {
+          showMessage("Please complete your delivery address.");
           return;
         }
       }
@@ -797,6 +872,28 @@
     // BOOT
     // ─────────────────────────────────────────────
     document.addEventListener("DOMContentLoaded", loadCart);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const addrFields = {
+        "address":     "Street address",
+        "city":        "City",
+        "postal-code": "Postal code",
+      };
+      Object.entries(addrFields).forEach(([id, label]) => {
+        const el = document.getElementById(id);
+        el.addEventListener("blur", () => {
+          const val = el.value.trim();
+          if (!val) {
+            setFieldError(id, `${label} is required`);
+          } else if (id === "postal-code" && !isValidPostalCode(val)) {
+            setFieldError(id, "Enter a valid Canadian postal code (e.g. L4M 1A1)");
+          } else {
+            clearFieldError(id);
+          }
+        });
+        el.addEventListener("input", () => clearFieldError(id));
+      });
+    });
   </script>
 
 </body>
