@@ -809,6 +809,22 @@
         }
       }
 
+      // Collect order data now, before handing off to Stripe
+      const orderData = {
+        firstName,
+        lastName,
+        email,
+        phone,
+        deliveryMethod,
+        address:    deliveryMethod !== "pickup" ? document.getElementById("address").value.trim()     : "",
+        city:       deliveryMethod !== "pickup" ? document.getElementById("city").value.trim()        : "",
+        postalCode: deliveryMethod !== "pickup" ? document.getElementById("postal-code").value.trim() : "",
+        items:       cart,
+        subtotal:    getSubtotal(),
+        deliveryFee: DELIVERY_FEES[deliveryMethod],
+        total:       getTotal(),
+      };
+
       setLoading(true);
 
       const { error } = await stripe.confirmPayment({
@@ -832,11 +848,22 @@
         setLoading(false);
       } else {
         // Payment succeeded without redirect
-        onPaymentSuccess();
+        onPaymentSuccess(orderData);
       }
     });
 
-    function onPaymentSuccess() {
+    async function onPaymentSuccess(orderData) {
+      if (orderData) {
+        try {
+          await fetch("/.netlify/functions/send-order-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData),
+          });
+        } catch (e) {
+          console.error("Order email failed:", e);
+        }
+      }
       localStorage.removeItem("gmacs_cart");
       document.getElementById("checkout-form-area").style.display = "none";
       document.getElementById("success-screen").style.display = "block";
