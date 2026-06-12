@@ -613,19 +613,14 @@
         <a href="checkout.html" class="btn-checkout">🛒 Go to Checkout</a>
       </div>
       <div class="order-form-wrap">
-        <p>Prefer to order by email? Fill out the form below and we'll get back to you to confirm your order and arrange delivery or pickup.</p>
-        <form class="order-form" onsubmit="sendOrder(event)">
-          <input type="text" id="name" placeholder="Your name" required />
-          <input type="tel" id="phone" placeholder="Phone number" required />
-          <input type="email" id="email" placeholder="Email address" required />
-          <input type="text" id="address" placeholder="Your location / delivery address" required />
-          <select id="method" required>
-            <option value="">Delivery or pickup?</option>
-            <option>Delivery</option>
-            <option>Market pickup</option>
-          </select>
-          <textarea id="order-notes" placeholder="What products are you looking for? List cuts and quantities." required></textarea>
-          <button type="submit" class="btn-primary" style="align-self:flex-start;">Send Order →</button>
+        <h2 class="dark">Special Orders</h2>
+        <p>Looking to order a half cow, a whole pig, or a custom cut not listed on our site? Fill out the form below and we'll get back to you to arrange the details.</p>
+        <form class="order-form" onsubmit="sendInquiry(event)">
+          <input type="text" id="inq-name" placeholder="Your name" required />
+          <input type="tel" id="inq-phone" placeholder="Phone number" required />
+          <input type="email" id="inq-email" placeholder="Email address" required />
+          <textarea id="inq-details" placeholder="Tell us what you're looking for — e.g. half cow, whole pig, custom cuts, quantities, and any questions." required></textarea>
+          <button type="submit" class="btn-primary" style="align-self:flex-start;">Send Inquiry →</button>
         </form>
       </div>
     </div>
@@ -737,17 +732,14 @@
       popup._timer = setTimeout(() => { popup.style.opacity = "0"; popup.style.transform = "translateY(20px)"; }, 1800);
     }
 
-    function sendOrder(e) {
+    function sendInquiry(e) {
       e.preventDefault();
-      const name = document.getElementById("name").value;
-      const phone = document.getElementById("phone").value;
-      const email = document.getElementById("email").value;
-      const address = document.getElementById("address").value;
-      const method = document.getElementById("method").value;
-      const notes = document.getElementById("order-notes").value;
-      const cartSummary = cart.length > 0 ? cart.map(i => `${i.name} x${i.qty}`).join("\n") : notes;
-      const body = `NEW ORDER REQUEST\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nMethod: ${method}\nAddress: ${address}\n\nOrder Details:\n${cartSummary}\n\n------------------------\nSent from website`;
-      window.location.href = `mailto:gmacswholesale@gmail.com?subject=${encodeURIComponent("New Order - Gmac's Fresh Meat")}&body=${encodeURIComponent(body)}`;
+      const name    = document.getElementById("inq-name").value;
+      const phone   = document.getElementById("inq-phone").value;
+      const email   = document.getElementById("inq-email").value;
+      const details = document.getElementById("inq-details").value;
+      const body = `SPECIAL ORDER INQUIRY\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\n\nDetails:\n${details}\n\n------------------------\nSent from gmacsfreshmeat.com`;
+      window.location.href = `mailto:gmacswholesale@gmail.com?subject=${encodeURIComponent("Special Order Inquiry - Gmac's Fresh Meat")}&body=${encodeURIComponent(body)}`;
     }
 
     renderDrawer();
