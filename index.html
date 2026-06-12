@@ -162,11 +162,13 @@
     .product-card-img { width: 100%; height: 150px; object-fit: cover; display: block; background: #EDD8BB; }
     .product-card-body { padding: 1rem 1.1rem 1.1rem; display: flex; flex-direction: column; flex-grow: 1; }
     .product-card .name { font-size: 15px; font-weight: 700; color: #1A1A1A; margin-bottom: 4px; font-family: 'Playfair Display', Georgia, serif; }
-    .product-card .desc { font-size: 12px; color: var(--brown); flex-grow: 1; margin-bottom: 10px; line-height: 1.5; }
+    .product-card .desc { font-size: 12px; color: var(--brown); flex-grow: 1; line-height: 1.5; }
     .product-card .price { font-size: 16px; font-weight: 700; color: var(--brown); }
     .add-btn { width: 100%; background: var(--brown); color: var(--cream); border: none; padding: 9px 0; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; margin-top: 10px; transition: background 0.2s; }
     .add-btn:hover { background: var(--dark-brown); }
     .add-btn.added { background: #3A7D44; }
+    .product-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+    .size-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: #F5EDE0; border: 1px solid var(--border); color: var(--brown); letter-spacing: 0.04em; white-space: nowrap; }
     .size-toggle { display: flex; gap: 6px; margin-top: 10px; }
     .size-opt { flex: 1; padding: 7px 0; border: 1.5px solid var(--brown); border-radius: 6px; background: transparent; color: var(--brown); font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; transition: all 0.2s; }
     .size-opt.selected { background: var(--brown); color: var(--cream); }
@@ -320,8 +322,8 @@
         <img src="striploin.jpeg" class="product-card-img" alt="New York Striploin" />
         <div class="product-card-body">
           <div class="name">New York Striploin</div>
-          <div class="desc">12oz · Grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
-          <div class="price">$30</div>
+          <div class="desc">Grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">12oz</span><div class="price">$30</div></div>
           <button class="add-btn" onclick="addToCart('New York Striploin', 30, this)">Add to Order</button>
         </div>
       </div>
@@ -331,8 +333,8 @@
         <img src="ribeye.jpg" class="product-card-img" alt="Ribeye Steak" />
         <div class="product-card-body">
           <div class="name">Ribeye Steak</div>
-          <div class="desc">12oz · Grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
-          <div class="price">$30</div>
+          <div class="desc">Grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">12oz</span><div class="price">$30</div></div>
           <button class="add-btn" onclick="addToCart('Ribeye Steak', 30, this)">Add to Order</button>
         </div>
       </div>
@@ -343,7 +345,7 @@
         <div class="product-card-body">
           <div class="name">Tomahawk Steak</div>
           <div class="desc">Ontario grass-fed — the showstopper cut · Vacuum sealed</div>
-          <div class="price">$75</div>
+          <div class="product-meta"><span class="size-badge">25oz</span><div class="price">$75</div></div>
           <button class="add-btn" onclick="addToCart('Tomahawk Steak', 75, this)">Add to Order</button>
         </div>
       </div>
@@ -353,8 +355,8 @@
         <img src="porterhouse.jpg" class="product-card-img" alt="Porterhouse Steak" />
         <div class="product-card-body">
           <div class="name">Porterhouse Steak</div>
-          <div class="desc">16oz · Grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
-          <div class="price">$40</div>
+          <div class="desc">Grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">16oz</span><div class="price">$40</div></div>
           <button class="add-btn" onclick="addToCart('Porterhouse Steak', 40, this)">Add to Order</button>
         </div>
       </div>
@@ -364,8 +366,8 @@
         <img src="top_sirloin.webp" class="product-card-img" alt="Top Sirloin Steak" />
         <div class="product-card-body">
           <div class="name">Top Sirloin Steak</div>
-          <div class="desc">8oz · Grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
-          <div class="price">$20</div>
+          <div class="desc">Grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">8oz</span><div class="price">$20</div></div>
           <button class="add-btn" onclick="addToCart('Top Sirloin Steak', 20, this)">Add to Order</button>
         </div>
       </div>
@@ -389,8 +391,8 @@
         <img src="cowboy_ribeye.jpg" class="product-card-img" alt="Gmac's Signature Cowboy Ribeye" />
         <div class="product-card-body">
           <div class="name">Gmac's Signature Cowboy Ribeye</div>
-          <div class="desc">AAA 12oz grass-fed &amp; finished ribeye — our signature cut · Vacuum sealed</div>
-          <div class="price">$50</div>
+          <div class="desc">AAA grass-fed &amp; finished ribeye — our signature cut · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">12oz</span><div class="price">$50</div></div>
           <button class="add-btn" onclick="addToCart('Gmac\'s Signature Cowboy Ribeye', 50, this)">Add to Order</button>
         </div>
       </div>
@@ -400,8 +402,8 @@
         <img src="primeribburger.jpeg" class="product-card-img" alt="Prime Rib Burgers" />
         <div class="product-card-body">
           <div class="name">Prime Rib Burgers</div>
-          <div class="desc">4-pack · Rich, beefy Ontario flavour · Vacuum sealed</div>
-          <div class="price">$20</div>
+          <div class="desc">Rich, beefy Ontario flavour · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">4-pack</span><div class="price">$20</div></div>
           <button class="add-btn" onclick="addToCart('Prime Rib Burgers', 20, this)">Add to Order</button>
         </div>
       </div>
@@ -411,8 +413,8 @@
         <img src="chuck and brisket burger.jpg" class="product-card-img" alt="Wagyu Burgers" />
         <div class="product-card-body">
           <div class="name">Wagyu Burgers</div>
-          <div class="desc">2-pack · Premium marbled wagyu beef · Vacuum sealed</div>
-          <div class="price">$20</div>
+          <div class="desc">Premium marbled wagyu beef · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">2-pack</span><div class="price">$20</div></div>
           <button class="add-btn" onclick="addToCart('Wagyu Burgers', 20, this)">Add to Order</button>
         </div>
       </div>
@@ -422,8 +424,8 @@
         <img src="waygu burger.jpg" class="product-card-img" alt="Chuck & Brisket Burgers" />
         <div class="product-card-body">
           <div class="name">Chuck &amp; Brisket Burgers</div>
-          <div class="desc">4-pack · Slow-cooked flavour profile · Vacuum sealed</div>
-          <div class="price">$20</div>
+          <div class="desc">Slow-cooked flavour profile · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">4-pack</span><div class="price">$20</div></div>
           <button class="add-btn" onclick="addToCart('Chuck & Brisket Burgers', 20, this)">Add to Order</button>
         </div>
       </div>
@@ -439,8 +441,8 @@
         <img src="whole_chicken.jpg" class="product-card-img" alt="Organic Whole Chicken" />
         <div class="product-card-body">
           <div class="name">Organic Whole Chicken</div>
-          <div class="desc">2.5lb · Organic Ontario raised chicken · Fresh</div>
-          <div class="price">$20</div>
+          <div class="desc">Organic Ontario raised chicken · Fresh</div>
+          <div class="product-meta"><span class="size-badge">2.5lb</span><div class="price">$20</div></div>
           <button class="add-btn" onclick="addToCart('Organic Whole Chicken', 20, this)">Add to Order</button>
         </div>
       </div>
@@ -450,8 +452,8 @@
         <img src="drumsticks.webp" class="product-card-img" alt="Organic Chicken Drumsticks" />
         <div class="product-card-body">
           <div class="name">Organic Chicken Drumsticks</div>
-          <div class="desc">1lb pack · 4 large organic Ontario drumsticks · Non-GMO</div>
-          <div class="price">$20</div>
+          <div class="desc">4 large organic Ontario drumsticks · Non-GMO</div>
+          <div class="product-meta"><span class="size-badge">1lb</span><div class="price">$20</div></div>
           <button class="add-btn" onclick="addToCart('Organic Chicken Drumsticks', 20, this)">Add to Order</button>
         </div>
       </div>
@@ -461,8 +463,8 @@
         <img src="chicken_burgers.webp" class="product-card-img" alt="Handmade Organic Chicken Burgers" />
         <div class="product-card-body">
           <div class="name">Handmade Organic Chicken Burgers</div>
-          <div class="desc">4 × 4oz handmade patties · Ontario farmed organic chicken · Vacuum sealed</div>
-          <div class="price">$15</div>
+          <div class="desc">Handmade patties · Ontario farmed organic chicken · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">4 × 4oz</span><div class="price">$15</div></div>
           <button class="add-btn" onclick="addToCart('Handmade Organic Chicken Burgers', 15, this)">Add to Order</button>
         </div>
       </div>
@@ -472,8 +474,8 @@
         <img src="chicken wings.jpg" class="product-card-img" alt="Chicken Wings" />
         <div class="product-card-body">
           <div class="name">Split Tip Chicken Wings</div>
-          <div class="desc">1lb · Non-GMO Ontario raised · Vacuum sealed</div>
-          <div class="price">$20</div>
+          <div class="desc">Non-GMO Ontario raised · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">1lb</span><div class="price">$20</div></div>
           <button class="add-btn" onclick="addToCart('Split Tip Chicken Wings', 20, this)">Add to Order</button>
         </div>
       </div>
@@ -483,8 +485,8 @@
         <img src="chicken breast.jpg" class="product-card-img" alt="Organic Chicken Breast" />
         <div class="product-card-body">
           <div class="name">Organic Chicken Breast</div>
-          <div class="desc">2-pack · Non-GMO organic Ontario chicken · Vacuum sealed</div>
-          <div class="price">$20</div>
+          <div class="desc">Non-GMO organic Ontario chicken · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">2-pack</span><div class="price">$20</div></div>
           <button class="add-btn" onclick="addToCart('Organic Chicken Breast', 20, this)">Add to Order</button>
         </div>
       </div>
@@ -500,8 +502,8 @@
         <img src="pork ribs.jpg" class="product-card-img" alt="Pork Back Ribs" />
         <div class="product-card-body">
           <div class="name">Pork Back Ribs</div>
-          <div class="desc">Full rack · Ontario pork · Vacuum sealed</div>
-          <div class="price">$30</div>
+          <div class="desc">Ontario pork · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">Full Rack</span><div class="price">$30</div></div>
           <button class="add-btn" onclick="addToCart('Pork Back Ribs', 30, this)">Add to Order</button>
         </div>
       </div>
@@ -522,8 +524,8 @@
         <img src="dry_cured_bacon.jpg" class="product-card-img" alt="Double Smoked Dry Cured Bacon" />
         <div class="product-card-body">
           <div class="name">Double Smoked &amp; Dry Cured Bacon</div>
-          <div class="desc">16 pieces · Double smoked &amp; dry cured with salt &amp; seasoning — bold, intense smoky flavour · Vacuum sealed</div>
-          <div class="price">$20</div>
+          <div class="desc">Double smoked &amp; dry cured — bold, intense smoky flavour · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">16 pieces</span><div class="price">$20</div></div>
           <button class="add-btn" onclick="addToCart('Double Smoked & Dry Cured Bacon', 20, this)">Add to Order</button>
         </div>
       </div>
@@ -533,8 +535,8 @@
         <img src="pemale.webp" class="product-card-img" alt="Peameal Bacon" />
         <div class="product-card-body">
           <div class="name">Peameal Bacon</div>
-          <div class="desc">4-pack · Ontario pork peameal bacon · A Canadian classic</div>
-          <div class="price">$5</div>
+          <div class="desc">Ontario pork peameal bacon · A Canadian classic</div>
+          <div class="product-meta"><span class="size-badge">4-pack</span><div class="price">$5</div></div>
           <button class="add-btn" onclick="addToCart('Peameal Bacon', 5, this)">Add to Order</button>
         </div>
       </div>
@@ -544,8 +546,8 @@
         <img src="honey garlic.jpg" class="product-card-img" alt="Honey Garlic Sausage" />
         <div class="product-card-body">
           <div class="name">Honey Garlic Sausage</div>
-          <div class="desc">4-pack · Sweet and savoury Ontario pork · Vacuum sealed</div>
-          <div class="price">$15</div>
+          <div class="desc">Sweet and savoury Ontario pork · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">4-pack</span><div class="price">$15</div></div>
           <button class="add-btn" onclick="addToCart('Honey Garlic Sausage', 15, this)">Add to Order</button>
         </div>
       </div>
@@ -555,8 +557,8 @@
         <img src="chorizo.jpg" class="product-card-img" alt="Chorizo Sausage" />
         <div class="product-card-body">
           <div class="name">Chorizo Sausage</div>
-          <div class="desc">4-pack · Bold and smoky Ontario pork · Vacuum sealed</div>
-          <div class="price">$15</div>
+          <div class="desc">Bold and smoky Ontario pork · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">4-pack</span><div class="price">$15</div></div>
           <button class="add-btn" onclick="addToCart('Chorizo Sausage', 15, this)">Add to Order</button>
         </div>
       </div>
@@ -566,8 +568,8 @@
         <img src="spicy italian.jpg" class="product-card-img" alt="Spicy Italian Sausage" />
         <div class="product-card-body">
           <div class="name">Spicy Italian Sausage</div>
-          <div class="desc">4-pack · Classic Italian heat · Ontario pork · Vacuum sealed</div>
-          <div class="price">$15</div>
+          <div class="desc">Classic Italian heat · Ontario pork · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">4-pack</span><div class="price">$15</div></div>
           <button class="add-btn" onclick="addToCart('Spicy Italian Sausage', 15, this)">Add to Order</button>
         </div>
       </div>
@@ -577,8 +579,8 @@
         <img src="breakfast_sausage.webp" class="product-card-img" alt="Pork Breakfast Sausage" />
         <div class="product-card-body">
           <div class="name">Pork Breakfast Sausage</div>
-          <div class="desc">8-pack · Savoury Ontario pork sausages — perfect for any morning · Contains wheat · Vacuum sealed</div>
-          <div class="price">$10</div>
+          <div class="desc">Savoury Ontario pork sausages — perfect for any morning · Contains wheat · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">8-pack</span><div class="price">$10</div></div>
           <button class="add-btn" onclick="addToCart('Pork Breakfast Sausage', 10, this)">Add to Order</button>
         </div>
       </div>
@@ -593,8 +595,8 @@
         <img src="lamb loin chop.jpg" class="product-card-img" alt="Lamb Loin Chops" />
         <div class="product-card-body">
           <div class="name">Lamb Loin Chops</div>
-          <div class="desc">4-pack · Ontario lamb · Vacuum sealed</div>
-          <div class="price">$40</div>
+          <div class="desc">Ontario lamb · Vacuum sealed</div>
+          <div class="product-meta"><span class="size-badge">4-pack</span><div class="price">$40</div></div>
           <button class="add-btn" onclick="addToCart('Lamb Loin Chops', 40, this)">Add to Order</button>
         </div>
       </div>
