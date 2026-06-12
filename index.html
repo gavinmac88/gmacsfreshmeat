@@ -167,6 +167,8 @@
     .add-btn { width: 100%; background: var(--brown); color: var(--cream); border: none; padding: 9px 0; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; margin-top: 10px; transition: background 0.2s; }
     .add-btn:hover { background: var(--dark-brown); }
     .add-btn.added { background: #3A7D44; }
+    .size-btns { display: flex; gap: 6px; margin-top: 10px; }
+    .size-btns .add-btn { margin-top: 0; font-size: 13px; }
 
     /* ── BLACK HALF ── */
     .black-half { background: #1A1A1A; }
@@ -372,8 +374,10 @@
         <div class="product-card-body">
           <div class="name">Grass Fed Ground Beef</div>
           <div class="desc">Made from AAA grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
-          <div class="price">1lb $20 · 2lb $35</div>
-          <button class="add-btn" onclick="addToCart('Grass Fed Ground Beef (1lb)', 20, this)">Add to Order</button>
+          <div class="size-btns">
+            <button class="add-btn" onclick="addToCart('Grass Fed Ground Beef (1lb)', 20, this)">1lb — $20</button>
+            <button class="add-btn" onclick="addToCart('Grass Fed Ground Beef (2lb)', 35, this)">2lb — $35</button>
+          </div>
         </div>
       </div>
 
