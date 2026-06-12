@@ -167,8 +167,10 @@
     .add-btn { width: 100%; background: var(--brown); color: var(--cream); border: none; padding: 9px 0; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; margin-top: 10px; transition: background 0.2s; }
     .add-btn:hover { background: var(--dark-brown); }
     .add-btn.added { background: #3A7D44; }
-    .size-btns { display: flex; gap: 6px; margin-top: 10px; }
-    .size-btns .add-btn { margin-top: 0; font-size: 13px; }
+    .size-toggle { display: flex; gap: 6px; margin-top: 10px; }
+    .size-opt { flex: 1; padding: 7px 0; border: 1.5px solid var(--brown); border-radius: 6px; background: transparent; color: var(--brown); font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Lato', sans-serif; transition: all 0.2s; }
+    .size-opt.selected { background: var(--brown); color: var(--cream); }
+    .size-opt:hover:not(.selected) { background: #F5EDE0; }
 
     /* ── BLACK HALF ── */
     .black-half { background: #1A1A1A; }
@@ -374,10 +376,11 @@
         <div class="product-card-body">
           <div class="name">Grass Fed Ground Beef</div>
           <div class="desc">Made from AAA grass-fed &amp; finished Ontario beef · Vacuum sealed</div>
-          <div class="size-btns">
-            <button class="add-btn" onclick="addToCart('Grass Fed Ground Beef (1lb)', 20, this)">1lb — $20</button>
-            <button class="add-btn" onclick="addToCart('Grass Fed Ground Beef (2lb)', 35, this)">2lb — $35</button>
+          <div class="size-toggle">
+            <button class="size-opt selected" data-name="Grass Fed Ground Beef (1lb)" data-price="20">1lb — $20</button>
+            <button class="size-opt" data-name="Grass Fed Ground Beef (2lb)" data-price="35">2lb — $35</button>
           </div>
+          <button class="add-btn" onclick="addGroundBeef(this)">Add to Order</button>
         </div>
       </div>
 
@@ -744,6 +747,20 @@
       const details = document.getElementById("inq-details").value;
       const body = `SPECIAL ORDER INQUIRY\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\n\nDetails:\n${details}\n\n------------------------\nSent from gmacsfreshmeat.com`;
       window.location.href = `mailto:gmacswholesale@gmail.com?subject=${encodeURIComponent("Special Order Inquiry - Gmac's Fresh Meat")}&body=${encodeURIComponent(body)}`;
+    }
+
+    // Ground beef size toggle
+    document.querySelectorAll('.size-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.size-opt').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+
+    function addGroundBeef(addBtn) {
+      const selected = document.querySelector('.size-opt.selected');
+      if (!selected) return;
+      addToCart(selected.dataset.name, parseFloat(selected.dataset.price), addBtn);
     }
 
     renderDrawer();
